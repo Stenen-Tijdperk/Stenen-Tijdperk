@@ -1,6 +1,7 @@
 
 package domein;
 
-public class Stamlid {
+public class Stamlid 
+{
 //Ik weet niet wat ik hier moet schrijven -Souhaib
 }

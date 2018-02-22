@@ -1,7 +1,7 @@
 package domein;
 
-public class Gebied {
-
+public class Gebied 
+{
     private final String naamGebied;
     private final int aantalMaxLeden;
     private final String functie;
@@ -13,16 +13,18 @@ public class Gebied {
         this.functie = functie;
     }
 
-    public String getNaamGebied() {
+    public String getNaamGebied() 
+    {
         return naamGebied;
     }
 
-    public int getAantalMaxLeden() {
+    public int getAantalMaxLeden() 
+    {
         return aantalMaxLeden;
     }
 
-    public String getFunctie() {
+    public String getFunctie() 
+    {
         return functie;
     }
-    
 }
