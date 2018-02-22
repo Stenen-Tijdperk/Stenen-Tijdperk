@@ -1,4 +1,3 @@
-
 package domein;
 
 public class Gereedschapsfiche 
@@ -8,9 +7,16 @@ public class Gereedschapsfiche
     
     // moet hier een constructor komen? Rob
     
+    public Gereedschapsfiche(int waarde, boolean reedsGebruiktDezeRonde)
+    {
+        setWaarde(waarde);
+        setReedsGebruiktDezeRonde(false);
+    }
+    
+    //dit is Basically een getter voor een boolean - Ruben
     public boolean isReedsGebruiktDezeRonde()
     {
-        
+        return reedsGebruiktDezeRonde;
     }
 
     public void setWaarde(int waarde) 

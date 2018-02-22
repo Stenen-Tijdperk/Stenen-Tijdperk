@@ -1,7 +1,6 @@
 package domein;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import domein.Gereedschapsfiche;
 
 public class Speler {
 
@@ -9,15 +8,15 @@ public class Speler {
     private int aantalLeem;
     private int aantalSteen;
     private int aantalGoud;
-    private final GregorianCalendar geboortdeDatum = null; //DIT IS ECHT FUCKED UP? IK WEET NIET HOE HET WERKT -SOUHAIB 
-    //--> ik heb zitten zoeken naar een oplossing, maar vond niet echt iets, heb onderaan wel een mogelijke oplossing gezet - Rob
     private final String kleur;
     private final String naamSpeler;
-    private boolean beurt;
+    private boolean aanBeurt;
     
-    public Speler(String kleur, String naamSpeler, GregorianCalendar geboorteDatum)
+    //IK BEN VRIJ ZEKER DAT GEBOORTEDATUM MISSCHIEN WEG MAG OMDAT WE EEN VEREENVOUDIG KRIJGEN
+    //DE BEGINNENDE SPELER WORDT RANDOM GEKOZEN -Ruben
+    
+    public Speler(String kleur, String naamSpeler)
     {
-        this.geboortdeDatum = new GregorianCalendar(); //DIT IS ECHT FUCKED UP? IK WEET NIET HOE HET WERKT -SOUHAIB
         this.kleur = kleur;
         this.naamSpeler = naamSpeler;
     }
@@ -37,39 +36,55 @@ public class Speler {
         //Ik weet niet wat ik hier moet schrijven -Souhaib
     }
     
-    public boolean isAanBeur()
+    //Dit is basically een getter voor een boolean
+    public boolean isAanBeurt()
     {
-        //Ik weet niet wat ik hier moet schrijven -Souhaib
+        return aanBeurt;
     }
     
-    public void gebruikGereedschapsfische()
+    public void gebruikGereedschapsfische(Gereedschapsfiche gereedschap)
     {
-        //Ik weet niet wat ik hier moet schrijven -Souhaib
+        if (gereedschap.isReedsGebruiktDezeRonde() == true)
+            throw new IllegalArgumentException("Het gereedschap is reeds gebruikt. Wacht tot de volgende ronde.");
+        else {
+            gereedschap.setReedsGebruiktDezeRonde(true);
+            //+ methode voor meer dobbelsteenogen per gereedschapsfichewaarde -Ruben
+        }
     }
 
     public void setAantalHout(int aantalHout) 
     {
+        if (aantalHout < 0)
+            throw new IllegalArgumentException("De speler kan niet minder als 0 hout hebben.");
         this.aantalHout = aantalHout;
     }
 
     public void setAantalLeem(int aantalLeem) 
     {
+        if (aantalLeem < 0)
+            throw new IllegalArgumentException("De speler kan niet minder als 0 leem hebben.");
         this.aantalLeem = aantalLeem;
     }
 
     public void setAantalSteen(int aantalSteen) 
     {
+        if (aantalSteen < 0)
+            throw new IllegalArgumentException("De speler kan niet minder als 0 steen hebben.");
         this.aantalSteen = aantalSteen;
     }
 
     public void setAantalGoud(int aantalGoud) 
     {
+        if (aantalGoud < 0)
+            throw new IllegalArgumentException("De speler kan niet minder als 0 goud hebben.");
         this.aantalGoud = aantalGoud;
     }
     
     public void geefKleurAanSpeler()
     {
         //Ik weet niet wat ik hier moet schrijven -Souhaib
+        //Random generator tussen 1-4 en elke nummerke vaststellen aan een kleur?
+        //Maar ik weet niet of dit nodig is.
     }
 }
 
