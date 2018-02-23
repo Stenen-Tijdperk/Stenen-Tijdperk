@@ -1,52 +1,33 @@
 package domein;
 
-import domein.Gereedschapsfiche;
+import java.security.SecureRandom;
 
-public class Speler {
+public final class Speler {
 
     private int aantalHout;
     private int aantalLeem;
     private int aantalSteen;
     private int aantalGoud;
     private int aantalVoedsel;
-    private final String kleur;
     private final String naamSpeler;
-    private boolean aanBeurt;
+    private static String kleur;
             
     
-    //IK BEN VRIJ ZEKER DAT GEBOORTEDATUM MISSCHIEN WEG MAG OMDAT WE EEN VEREENVOUDIG KRIJGEN
-    //DE BEGINNENDE SPELER WORDT RANDOM GEKOZEN -Ruben
+    /*
+    DE CODE DIE TOCH LEEG WAS HEB IK WEGGEDAAN
+    OMDAT HET TOCH NIET NUTTIG WAS EROP TE STAREN
+    EN NOG NIET NODIG IS VOOR ITERATIE 1 -Ruben
+    */
     
-    public Speler(String naamSpeler)
+    public Speler(String naamSpeler, int aantalHout, int aantalLeem, int aantalSteen, int aantalGoud, int aantalVoedsel, String kleur)
     {
         this.naamSpeler = naamSpeler;
-        
-    }
-    
-    public int geefAantalHutten()
-    {
-        //Ik weet niet wat ik hier moet schrijven -Souhaib
-    }
-    
-    public int berekenAantalHutten()
-    {
-        
-    }
-    
-    public int geefAantalGereedschapsfisches()
-    {
-        //Ik weet niet wat ik hier moet schrijven -Souhaib
-    }
-    
-    public int geefAantalStamleden()
-    {
-        //Ik weet niet wat ik hier moet schrijven -Souhaib
-    }
-    
-    //Dit is basically een getter voor een boolean
-    public boolean isAanBeurt()
-    {
-        return aanBeurt;
+        setAantalHout(aantalHout);
+        setAantalLeem(aantalLeem);
+        setAantalSteen(aantalSteen);
+        setAantalGoud(aantalGoud);
+        setAantalVoedsel(aantalVoedsel);
+        setKleur(kleur);
     }
     
     public void gebruikGereedschapsfische(Gereedschapsfiche gereedschap)
@@ -87,11 +68,36 @@ public class Speler {
         this.aantalGoud = aantalGoud;
     }
     
-    public void geefKleurAanSpeler()
+    public void setKleur(String kleur)
     {
-        //Ik weet niet wat ik hier moet schrijven -Souhaib
-        //Random generator tussen 1-4 en elke nummerke vaststellen aan een kleur?
-        //Maar ik weet niet of dit nodig is.
+        this.kleur = kleur;
+    }
+    
+    public static void bepaalKleurVanSpelers(Speler[] SpelerLijst)
+    {
+        SecureRandom random = new SecureRandom();
+        //Lijst van kleuren
+        String[] kleuren = {"rood", "geel", "blauw", "groen"};
+        int kleurNummer;
+        //De hele lijst Spelers doorlopen
+        for (Speler loper : SpelerLijst) {
+            //RANDOMIZER VOOR EEN KLEUR
+            kleurNummer = random.nextInt(4);
+            
+            switch(kleurNummer)
+            {
+                case 0: kleur = kleuren[0];
+                break;
+                case 1: kleur = kleuren[1];
+                break;
+                case 2: kleur = kleuren[2];
+                break;
+                case 3: kleur = kleuren[3];
+                break;
+            }
+        }
+        
+        
     }
 
     public void setAantalVoedsel(int aantalVoedsel)
@@ -100,32 +106,48 @@ public class Speler {
             throw new IllegalArgumentException("De speler kan niet minder als 0 voedsel hebben.");
         this.aantalVoedsel = aantalVoedsel;
     }
+    
+    public String getKleur()
+    {
+        return kleur;
+    }
 
-    public int getAantalHout() {
+    public int getAantalHout()
+    {
         return aantalHout;
     }
 
-    public int getAantalLeem() {
+    public int getAantalLeem()
+    {
         return aantalLeem;
     }
 
-    public int getAantalSteen() {
+    public int getAantalSteen()
+    {
         return aantalSteen;
     }
 
-    public int getAantalGoud() {
+    public int getAantalGoud()
+    {
         return aantalGoud;
     }
 
-    public int getAantalVoedsel() {
+    public int getAantalVoedsel()
+    {
         return aantalVoedsel;
+    }
+    
+    public String getNaamSpeler()
+    {
+        return naamSpeler;
     }
     
     @Override
     public String toString()
     {
-        return String.format("%s%s: aantal hout: %20d aantal leem: %20d aantal steen: %20d aantal goud:  %20d aantal voedsel: %20d",
-                this.getClass().getSimpleName(), naamSpeler, getAantalHout(), getAantalLeem(), getAantalSteen(), getAantalGoud(), getAantalVoedsel());
+        return String.format("%n%s %10s | KLEUR : %6s | Aantal hout: %2d | Aantal leem: %2d | Aantal steen: %2d | Aantal goud:  %2d | Aantal voedsel: %2d%n",
+                this.getClass().getSimpleName().toUpperCase(), getNaamSpeler(), getKleur(),
+                getAantalHout(), getAantalLeem(), getAantalSteen(), getAantalGoud(), getAantalVoedsel());
     }
 }
 
