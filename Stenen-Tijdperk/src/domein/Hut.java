@@ -1,5 +1,7 @@
 package domein;
 
+import java.util.Random;
+
 public final class Hut {
 
     private int aantalHoutPrijs;
@@ -35,31 +37,39 @@ public final class Hut {
     
     public void setAantalHoutPrijs(int aantalHoutPrijs) 
     {
-        //random generator tussen 1-x voor het aantal grondstoffen, staat in boek van programmeren
+       
+        Random randomGenerator = new Random();
+        aantalHoutPrijs = randomGenerator.nextInt(3);
         this.aantalHoutPrijs = aantalHoutPrijs;
     }
 
     public void setAantalLeemPrijs(int aantalLeemPrijs) 
     {
-        //random generator tussen 1-x voor het aantal grondstoffen, staat in boek van programmeren
+        
+        Random randomGenerator = new Random();
+        aantalLeemPrijs = randomGenerator.nextInt(4);
         this.aantalLeemPrijs = aantalLeemPrijs;
     }
 
     public void setAantalSteenPrijs(int aantalSteenPrijs) 
     {
-        //random generator tussen 1-x voor het aantal grondstoffen, staat in boek van programmeren
+        
+        Random randomGenerator = new Random();
+        aantalSteenPrijs = randomGenerator.nextInt(5);
         this.aantalSteenPrijs = aantalSteenPrijs;
     }
 
     public void setAantalGoudPrijs(int aantalGoudPrijs) 
     {
-        //random generator tussen 1-x voor het aantal grondstoffen, staat in boek van programmeren
+        
+        Random randomGenerator = new Random();
+        aantalGoudPrijs = randomGenerator.nextInt(6);
         this.aantalGoudPrijs = aantalGoudPrijs;
     }
 
     private void setSpeler(Speler speler)
     {
         //Ik weet niet hoe ge de speler vastzet aan een huizeke -Ruben
-        this.Speler = speler;  
+        this.speler = speler;  
     }
 }

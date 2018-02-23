@@ -8,22 +8,29 @@ public class Speler {
     private int aantalLeem;
     private int aantalSteen;
     private int aantalGoud;
+    private int aantalVoedsel;
     private final String kleur;
     private final String naamSpeler;
     private boolean aanBeurt;
+            
     
     //IK BEN VRIJ ZEKER DAT GEBOORTEDATUM MISSCHIEN WEG MAG OMDAT WE EEN VEREENVOUDIG KRIJGEN
     //DE BEGINNENDE SPELER WORDT RANDOM GEKOZEN -Ruben
     
-    public Speler(String kleur, String naamSpeler)
+    public Speler(String naamSpeler)
     {
-        this.kleur = kleur;
         this.naamSpeler = naamSpeler;
+        
     }
     
     public int geefAantalHutten()
     {
         //Ik weet niet wat ik hier moet schrijven -Souhaib
+    }
+    
+    public int berekenAantalHutten()
+    {
+        
     }
     
     public int geefAantalGereedschapsfisches()
@@ -85,6 +92,40 @@ public class Speler {
         //Ik weet niet wat ik hier moet schrijven -Souhaib
         //Random generator tussen 1-4 en elke nummerke vaststellen aan een kleur?
         //Maar ik weet niet of dit nodig is.
+    }
+
+    public void setAantalVoedsel(int aantalVoedsel)
+    {
+        if (aantalVoedsel < 0)
+            throw new IllegalArgumentException("De speler kan niet minder als 0 voedsel hebben.");
+        this.aantalVoedsel = aantalVoedsel;
+    }
+
+    public int getAantalHout() {
+        return aantalHout;
+    }
+
+    public int getAantalLeem() {
+        return aantalLeem;
+    }
+
+    public int getAantalSteen() {
+        return aantalSteen;
+    }
+
+    public int getAantalGoud() {
+        return aantalGoud;
+    }
+
+    public int getAantalVoedsel() {
+        return aantalVoedsel;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return String.format("%s%s: aantal hout: %20d aantal leem: %20d aantal steen: %20d aantal goud:  %20d aantal voedsel: %20d",
+                this.getClass().getSimpleName(), naamSpeler, getAantalHout(), getAantalLeem(), getAantalSteen(), getAantalGoud(), getAantalVoedsel());
     }
 }
 
