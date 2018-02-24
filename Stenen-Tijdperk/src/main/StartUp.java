@@ -1,5 +1,6 @@
-package ui;
+package main;
 
+import domein.Gebied;
 import domein.Speler;
 import java.security.SecureRandom;
 import java.util.Scanner;
@@ -84,13 +85,26 @@ public class StartUp
         System.out.printf("Speler %s mag beginnen.%n", SpelerLijst[nummer].getNaamSpeler());
         System.out.println();
     }
+    
+    // de verschillende gebieden maken
+    private static void AanmakenGebieden()
+    {
+        Gebied hut = new Gebied("hut",2,"extra stamlid");
+        Gebied akker = new Gebied("akker",1,"voedselproductie + 1");
+        Gebied jacht = new Gebied("jacht",80,"voedsel + x");
+        Gebied bos = new Gebied("bos",7,"hout + x");
+        Gebied leemgroeve = new Gebied("leemgroeve",7,"leem + x");
+        Gebied steengroeve = new Gebied("steengroeve",7,"steen + x");
+        Gebied rivier = new Gebied("rivier",7,"goud + x");
 
+    }
+    
     private static void toonMenuMetKeuze(Speler[] SpelerLijst)
     {
         Scanner invoer = new Scanner(System.in);
         int nummer;
         do{
-        System.out.printf("Geef een nummer voor de actie die u wilt doen: %n"
+        System.out.printf("Geef een nummer voor de actie die u wilt uitvoeren: %n"
                 + "1: toon spelers | 2: plaats stamleden | ...%n");
         nummer = invoer.nextInt();
         }while(nummer < 1 || nummer > 2);
@@ -98,12 +112,14 @@ public class StartUp
         //Witte lijn voor overzicht
         System.out.println();
         
+        
         switch(nummer)
         {
             case 1: toonSpelers(SpelerLijst);
             break;
-            case 2: plaatsStamleden()/*+ actie dat het van speler aan beurt veranderd*/;
-            break;
+            //case 2: plaatsStamleden()/*+ actie dat het van speler aan beurt veranderd*/;
+            //break;
         }
+        
     }
 }

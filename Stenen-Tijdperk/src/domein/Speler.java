@@ -80,7 +80,8 @@ public final class Speler {
         String[] kleuren = {"rood", "geel", "blauw", "groen"};
         int kleurNummer;
         //De hele lijst Spelers doorlopen
-        for (Speler loper : SpelerLijst) {
+        for (Speler loper : SpelerLijst)
+        {
             //RANDOMIZER VOOR EEN KLEUR
             kleurNummer = random.nextInt(4);
             
@@ -95,9 +96,7 @@ public final class Speler {
                 case 3: kleur = kleuren[3];
                 break;
             }
-        }
-        
-        
+        }           
     }
 
     public void setAantalVoedsel(int aantalVoedsel)
@@ -154,7 +153,7 @@ public final class Speler {
 /*
 code om de geboortedatum van een string om te zetten naar verschillende int's om dan zo om te zetten naar gregorian calendar.
 op deze manier kunnen we de geboortedatum als String inlezen, ik weet niet hoe we dit anders kunnen oplossen.
-        int x=0,y=0,z=0;
+        int dag=0,maand=0,jaar=0;
         String number;
         Scanner input = new Scanner(System.in);
         
@@ -171,29 +170,29 @@ op deze manier kunnen we de geboortedatum als String inlezen, ik weet niet hoe w
                 if (i == 1)
                 {
                     number = deel;
-                    x = Integer.parseInt(number);
+                    dag = Integer.parseInt(number);
                 }
                 if (i == 2)
                 {
                     number = deel;
-                    y = Integer.parseInt(number);
+                    maand = Integer.parseInt(number);
                 }
                 if (i == 3)
                 {
                     number = deel;
-                    z = Integer.parseInt(number);           
+                    jaar = Integer.parseInt(number);           
                 }
             }
             i++;
         }
-        System.out.println(x);
-        System.out.println(y);
-        System.out.println(z);
+        System.out.println(dag);
+        System.out.println(maand);
+        System.out.println(jaar);
 
         Calendar cal = new GregorianCalendar();
-        cal.set(Calendar.DAY_OF_MONTH, x);
-        cal.set(Calendar.MONTH, y);
-        cal.set(Calendar.YEAR, z);
+        cal.set(Calendar.DAY_OF_MONTH, dag);
+        cal.set(Calendar.MONTH, maand);
+        cal.set(Calendar.YEAR, jaar);
 
         int day = cal.get(Calendar.DAY_OF_MONTH);
         int month = cal.get(Calendar.MONTH);
