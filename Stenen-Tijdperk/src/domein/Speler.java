@@ -72,32 +72,6 @@ public final class Speler {
     {
         this.kleur = kleur;
     }
-    
-    public static void bepaalKleurVanSpelers(Speler[] SpelerLijst)
-    {
-        SecureRandom random = new SecureRandom();
-        //Lijst van kleuren
-        String[] kleuren = {"rood", "geel", "blauw", "groen"};
-        int kleurNummer;
-        //De hele lijst Spelers doorlopen
-        for (Speler loper : SpelerLijst)
-        {
-            //RANDOMIZER VOOR EEN KLEUR
-            kleurNummer = random.nextInt(4);
-            
-            switch(kleurNummer)
-            {
-                case 0: kleur = kleuren[0];
-                break;
-                case 1: kleur = kleuren[1];
-                break;
-                case 2: kleur = kleuren[2];
-                break;
-                case 3: kleur = kleuren[3];
-                break;
-            }
-        }           
-    }
 
     public void setAantalVoedsel(int aantalVoedsel)
     {
