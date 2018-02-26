@@ -2,12 +2,12 @@ package domein;
 
 public class Gebied 
 {
-    private String naamGebied;
+    private int nummer;
     private int aantalGenomenPlaatsen;
     private int aantalMaxLeden;
     private String functie;
-    private int nummer;
-    
+    private String naamGebied;
+       
     public Gebied(String naamGebied, int aantalMaxLeden, String functie, int nummer)
     {
         setNaamGebied(naamGebied);
@@ -35,17 +35,17 @@ public class Gebied
     {
         this.nummer = nummer;
     }
-    
-    public int getNummer()
-    {
-        return nummer;
-    }
-    
+     
     public void setAantalGenomenPlaatsen(int aantalGenomenPlaatsen)
     {
         if (aantalGenomenPlaatsen > aantalMaxLeden)
             throw new IllegalArgumentException("Het max aantal stamleden is overschreden!");
         this.aantalGenomenPlaatsen = aantalGenomenPlaatsen;
+    }
+    
+    public int getNummer()
+    {
+        return nummer;
     }
     
     public String getNaamGebied() 
@@ -60,7 +60,7 @@ public class Gebied
     
     public int getAantalGenomenPlaatsen()
     {
-            return aantalGenomenPlaatsen;
+        return aantalGenomenPlaatsen;
     }
     
     public String getFunctie() 
@@ -75,6 +75,4 @@ public class Gebied
                 this.getClass().getSimpleName().toUpperCase(), getNaamGebied(), getNummer(),
                 getAantalGenomenPlaatsen(), getAantalMaxLeden(), getFunctie());
     }
-
-    
 }

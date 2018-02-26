@@ -7,8 +7,7 @@ public final class Hut {
     private int aantalSteenPrijs;
     private int aantalGoudPrijs;
     private int nummer;
-    private Speler speler;
-
+    
     public Hut(int aantalHoutPrijs, int aantalLeemPrijs, int aantalSteenPrijs, int aantalGoudPrijs, int nummer)
     {
         setAantalHoutPrijs(aantalHoutPrijs);
@@ -20,8 +19,7 @@ public final class Hut {
     
     public int berekenKostPrijsHut()
     {
-        int kostPrijs = aantalHoutPrijs + aantalLeemPrijs + aantalSteenPrijs + aantalGoudPrijs;
-        return kostPrijs;
+        return (getAantalHoutPrijs() + getAantalLeemPrijs() + getAantalSteenPrijs() + getAantalGoudPrijs());
     }
     
     public void setAantalHoutPrijs(int aantalHoutPrijs) 
@@ -52,5 +50,25 @@ public final class Hut {
     public int getNummer()
     {
         return nummer;
+    }
+
+    public int getAantalHoutPrijs() 
+    {
+        return aantalHoutPrijs;
+    }
+
+    public int getAantalLeemPrijs() 
+    {
+        return aantalLeemPrijs;
+    }
+
+    public int getAantalSteenPrijs() 
+    {
+        return aantalSteenPrijs;
+    }
+
+    public int getAantalGoudPrijs() 
+    {
+        return aantalGoudPrijs;
     }
 }
