@@ -47,7 +47,7 @@ public final class Hut {
     {
         
         Random randomGenerator = new Random();
-        aantalLeemPrijs = randomGenerator.nextInt(4);
+        aantalLeemPrijs = randomGenerator.nextInt(3);
         this.aantalLeemPrijs = aantalLeemPrijs;
     }
 
@@ -55,7 +55,7 @@ public final class Hut {
     {
         
         Random randomGenerator = new Random();
-        aantalSteenPrijs = randomGenerator.nextInt(5);
+        aantalSteenPrijs = randomGenerator.nextInt(2);
         this.aantalSteenPrijs = aantalSteenPrijs;
     }
 
@@ -63,7 +63,7 @@ public final class Hut {
     {
         
         Random randomGenerator = new Random();
-        aantalGoudPrijs = randomGenerator.nextInt(6);
+        aantalGoudPrijs = randomGenerator.nextInt(2);
         this.aantalGoudPrijs = aantalGoudPrijs;
     }
 

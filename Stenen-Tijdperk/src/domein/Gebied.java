@@ -6,12 +6,46 @@ public class Gebied
     private int aantalGenomenPlaatsen;
     private int aantalMaxLeden;
     private String functie;
+    private int nummer;
     
-    public Gebied(String naamGebied, int aantalMaxLeden, String functie)
+    public Gebied(String naamGebied, int aantalMaxLeden, String functie, int nummer)
     {
         setNaamGebied(naamGebied);
         setAantalMaxLeden(aantalMaxLeden);
         setFunctie(functie);
+        setNummer(nummer);
+    }
+    
+    private void setNaamGebied(String naamGebied)
+    {
+        this.naamGebied = naamGebied;
+    }
+
+    private void setAantalMaxLeden(int aantalMaxLeden)
+    {
+        this.aantalMaxLeden = aantalMaxLeden;
+    }
+
+    private void setFunctie(String functie)
+    {
+        this.functie = functie;
+    }
+    
+    private void setNummer(int nummer)
+    {
+        this.nummer = nummer;
+    }
+    
+    public int getNummer()
+    {
+        return nummer;
+    }
+    
+    public void setAantalGenomenPlaatsen(int aantalGenomenPlaatsen)
+    {
+        if (aantalGenomenPlaatsen > aantalMaxLeden)
+            throw new IllegalArgumentException("Het max aantal stamleden is overschreden!");
+        this.aantalGenomenPlaatsen = aantalGenomenPlaatsen;
     }
     
     public String getNaamGebied() 
@@ -37,21 +71,10 @@ public class Gebied
     @Override
     public String toString()
     {
-        return String.format("%s %11s | Aantal genomen plaatsen: %2d | Aantal max stamleden: %2d | Functie %10s%n", this.getClass().getSimpleName().toUpperCase(), getNaamGebied(), getAantalGenomenPlaatsen(), getAantalMaxLeden(), getFunctie());
+        return String.format("%s %11s | Nummer gebied: %2d | Aantal genomen plaatsen: %2d | Aantal max stamleden: %2d | Functie %10s%n",
+                this.getClass().getSimpleName().toUpperCase(), getNaamGebied(), getNummer(),
+                getAantalGenomenPlaatsen(), getAantalMaxLeden(), getFunctie());
     }
 
-    private void setNaamGebied(String naamGebied)
-    {
-        this.naamGebied = naamGebied;
-    }
-
-    private void setAantalMaxLeden(int aantalMaxLeden)
-    {
-        this.aantalMaxLeden = aantalMaxLeden;
-    }
-
-    private void setFunctie(String functie)
-    {
-        this.functie = functie;
-    }
+    
 }

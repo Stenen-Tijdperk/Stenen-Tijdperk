@@ -23,6 +23,9 @@ public class StenenTijdperkApplicatie
         
         //In deze array worden de spelers hun objecten/namen opgeslagen
         Speler[] SpelerLijst = new Speler[aantalSpelers];
+        
+        //Gebieden worden aangemaakt
+        Gebied[] gebiedenLijst = aanmakenGebieden();
             
         String[] kleurenLijst = {"rood", "geel", "groen", "blauw"};
         
@@ -45,7 +48,7 @@ public class StenenTijdperkApplicatie
             }while(naamSpeler.length() >= 10);
             
             //CONSTRUCTOR VAN SPELER: NAAM, HOUT, LEEM, STEEN, GOUD, VOEDSEL, KLEUR
-            Speler speler = new Speler(naamSpeler, 0,0,0,0,12, kleurenLijst[i]);
+            Speler speler = new Speler(naamSpeler, 0,0,0,0,12, kleurenLijst[i], 5);
             
             //Speler opslaan in de lijst
             SpelerLijst[i] = speler;
@@ -53,20 +56,15 @@ public class StenenTijdperkApplicatie
             //Mooie lijn tussen elke speler
             System.out.println();
         }
-        
-        
+                
         //Print out dat spel is begonnen
         System.out.printf("Het spel is begonnen met %d spelers.%n", SpelerLijst.length);
         //Geef menu met keuzes
         bepaalRandomSpelerAanBeurt(SpelerLijst);
         
-        Gebied[] gebiedenLijst = aanmakenGebieden();
-        
         toonMenuMetKeuze(SpelerLijst, gebiedenLijst);
         
-        System.out.println();
-        
-            
+        System.out.println();   
     }
 
     private static void toonSpelers(Speler[] SpelerLijst)
@@ -87,8 +85,14 @@ public class StenenTijdperkApplicatie
     private static void bepaalRandomSpelerAanBeurt(Speler[] SpelerLijst)
     {
         SecureRandom random = new SecureRandom();
+        
+        //Speler int nummer is aan beurt
         int nummer = random.nextInt(SpelerLijst.length);
         System.out.printf("Speler %s mag beginnen.%n", SpelerLijst[nummer].getNaamSpeler());
+        
+        //Beurt wordt true gezet bij random bepaalde speler
+        SpelerLijst[nummer].setAanBeurt(true);
+        
         System.out.println();
     }
     
@@ -98,25 +102,25 @@ public class StenenTijdperkApplicatie
         //Lijst voor alle gebieden op te slaan, nummer 7 aan te passen adhv kaarten voor hutten
         Gebied[] gebiedenLijst = new Gebied[7];
         //Constructors vd gebieden
-        Gebied hut = new Gebied("hut",2,"extra stamlid");
+        Gebied hut = new Gebied("hut",2,"extra stamlid", 1);
         gebiedenLijst[0] = hut;
         
-        Gebied akker = new Gebied("akker",1,"voedselproductie + 1");
+        Gebied akker = new Gebied("akker",1,"voedselproductie + 1",2);
         gebiedenLijst[1] = akker;
         
-        Gebied jacht = new Gebied("jacht",40,"voedsel + x");
+        Gebied jacht = new Gebied("jacht",40,"voedsel + x",3);
         gebiedenLijst[2] = jacht;
         
-        Gebied bos = new Gebied("bos",7,"hout + x");
+        Gebied bos = new Gebied("bos",7,"hout + x",4);
         gebiedenLijst [3] = bos;
         
-        Gebied leemgroeve = new Gebied("leemgroeve",7,"leem + x");
+        Gebied leemgroeve = new Gebied("leemgroeve",7,"leem + x",5);
         gebiedenLijst[4] = leemgroeve;
         
-        Gebied steengroeve = new Gebied("steengroeve",7,"steen + x");
+        Gebied steengroeve = new Gebied("steengroeve",7,"steen + x",6);
         gebiedenLijst[5] = steengroeve;
         
-        Gebied rivier = new Gebied("rivier",7,"goud + x");
+        Gebied rivier = new Gebied("rivier",7,"goud + x",7);
         gebiedenLijst[6] = rivier;
         
         //return van de lijst met de gebied-objecten in
@@ -137,7 +141,7 @@ public class StenenTijdperkApplicatie
         int nummer;
         do{
         System.out.printf("Geef een nummer voor de actie die u wilt uitvoeren: %n"
-                + "1: Toon spelers | 2:  Toon gebieden | 3: Plaats stamleden ...%n");
+                + "1: Toon spelers | 2:  Toon gebieden | 3: Plaats stamleden | 4: Beurt overslaan%n");
         nummer = invoer.nextInt();
         }while(nummer < 1 || nummer > 3);
         
@@ -154,21 +158,42 @@ public class StenenTijdperkApplicatie
             case 3:
                 toonArrayGebieden(gebiedenLijst);
                 System.out.println();
+                int gebiedNummer, aantal;
+                
+                do{
                 System.out.print("Waar wil je uw stamleden plaatsen?");
+                gebiedNummer = invoer.nextInt();
+                }while(gebiedNummer < 0 || gebiedNummer > 7);
                 
-                
+                do{
                 System.out.print("Hoeveel stamleden wil je er plaatsen?");
-                int aantal = invoer.nextInt();
-                plaatsStamleden(plaats, aantal);
+                aantal = invoer.nextInt();
+                }while(controleerStamleden(aantal) == false);
+                
+                plaatsStamleden(gebiedNummer, aantal, gebiedenLijst);
+            break;
+            case 4: ;
             break;
         }
         
     }
 
-    private static void plaatsStamleden(Gebied gebied, int aantalStamleden)
+    private static void plaatsStamleden(int gebiedNummer, int aantalStamleden, Gebied[] gebiedenLijst)
     {
+        setAantalStamleden(getAantalStamleden() - aantalStamleden);
+        gebiedenLijst[gebiedNummer].setAantalGenomenPlaatsen(aantalStamleden);
+    }
+
+    private static boolean controleerStamleden(int aantal)
+    {
+        //aantal stamleden dat ge hebt
+        if (aantal > speler.getAantalStamleden())
+        {
+            
+        }
+        //aantal stamleden reeds op plek
         
-    
+        //max aantal stamleden op die plek mogelijk
     }
 
     public void start() throws InterruptedException

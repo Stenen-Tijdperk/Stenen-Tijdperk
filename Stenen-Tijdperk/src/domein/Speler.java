@@ -9,25 +9,23 @@ public final class Speler {
     private int aantalSteen;
     private int aantalGoud;
     private int aantalVoedsel;
-    private final String naamSpeler;
+    private int aantalStamleden;
+    
+    private String naamSpeler;
     private String kleur;
+    
+    private boolean aanBeurt = false;
             
-    
-    /*
-    DE CODE DIE TOCH LEEG WAS HEB IK WEGGEDAAN
-    OMDAT HET TOCH NIET NUTTIG WAS EROP TE STAREN
-    EN NOG NIET NODIG IS VOOR ITERATIE 1 -Ruben
-    */
-    
-    public Speler(String naamSpeler, int aantalHout, int aantalLeem, int aantalSteen, int aantalGoud, int aantalVoedsel, String kleur)
+    public Speler(String naamSpeler, int aantalHout, int aantalLeem, int aantalSteen, int aantalGoud, int aantalVoedsel, String kleur, int aantalStamleden)
     {
-        this.naamSpeler = naamSpeler;
+        setNaamSpeler(naamSpeler);
         setAantalHout(aantalHout);
         setAantalLeem(aantalLeem);
         setAantalSteen(aantalSteen);
         setAantalGoud(aantalGoud);
         setAantalVoedsel(aantalVoedsel);
         setKleur(kleur);
+        setAantalStamleden(aantalStamleden);
     }
     
     public void gebruikGereedschapsfische(Gereedschapsfiche gereedschap)
@@ -80,6 +78,11 @@ public final class Speler {
         this.aantalVoedsel = aantalVoedsel;
     }
     
+    public void setAantalStamleden(int aantalStamleden)
+    {
+        this.aantalStamleden = aantalStamleden;
+    }
+    
     public String getKleur()
     {
         return kleur;
@@ -115,12 +118,34 @@ public final class Speler {
         return naamSpeler;
     }
     
+    public int getAantalStamleden()
+    {
+        return aantalStamleden;
+    }
+    
+    public void setAanBeurt(boolean aanBeurt)
+    {
+        this.aanBeurt = aanBeurt;
+    }
+    
+    public boolean getAanBeurt()
+    {
+        return aanBeurt;
+    }
+    
     @Override
     public String toString()
     {
         return String.format("%n%s %10s | KLEUR : %6s | Aantal hout: %2d | Aantal leem: %2d | Aantal steen: %2d | Aantal goud:  %2d | Aantal voedsel: %2d%n",
                 this.getClass().getSimpleName().toUpperCase(), getNaamSpeler(), getKleur(),
                 getAantalHout(), getAantalLeem(), getAantalSteen(), getAantalGoud(), getAantalVoedsel());
+    }
+
+    private void setNaamSpeler(String naamSpeler)
+    {
+        if (naamSpeler.length() > 10)
+            throw new IllegalArgumentException("Naam van de speler is te lang!");
+        this.naamSpeler = naamSpeler;
     }
 }
 
