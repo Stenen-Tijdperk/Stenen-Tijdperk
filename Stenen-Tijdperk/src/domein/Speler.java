@@ -11,21 +11,13 @@ public final class Speler {
     private int aantalVoedsel;
     private int aantalStamleden;
     private int nummer;
-
-    public int getNummer() {
-        return nummer;
-    }
-
-    public void setNummer(int nummer) {
-        this.nummer = nummer;
-    }
     
     private String naamSpeler;
     private String kleur;
     
     private boolean aanBeurt = false;
-            
-    public Speler(String naamSpeler, int aantalHout, int aantalLeem, int aantalSteen, int aantalGoud, int aantalVoedsel, String kleur, int aantalStamleden, int nummer)
+    
+    public Speler(String naamSpeler, int aantalHout, int aantalLeem, int aantalSteen, int aantalGoud, int aantalVoedsel, String kleur, int aantalStamleden, int nummer, boolean aanBeurt)
     {
         setNaamSpeler(naamSpeler);
         setAantalHout(aantalHout);
@@ -36,8 +28,17 @@ public final class Speler {
         setKleur(kleur);
         setAantalStamleden(aantalStamleden);
         setNummer(nummer);
+        setAanBeurt(aanBeurt);
     }
     
+    public int getNummer() {
+        return nummer;
+    }
+
+    public void setNummer(int nummer) {
+        this.nummer = nummer;
+    }
+          
     public void gebruikGereedschapsfische(Gereedschapsfiche gereedschap)
     {
         if (gereedschap.isReedsGebruiktDezeRonde() == true)

@@ -53,7 +53,7 @@ public class StenenTijdperkApplicatie
             }while(naamSpeler.length() >= 10);
             
             //CONSTRUCTOR VAN SPELER: NAAM, HOUT, LEEM, STEEN, GOUD, VOEDSEL, KLEUR
-            Speler speler = new Speler(naamSpeler, 0,0,0,0,12, kleurenLijst[i], 5, nummerkesLijst[i]);
+            Speler speler = new Speler(naamSpeler, 0,0,0,0,12, kleurenLijst[i], 5, nummerkesLijst[i], false);
             
             //Speler opslaan in de lijst
             SpelerLijst[i] = speler;
@@ -144,7 +144,7 @@ public class StenenTijdperkApplicatie
         System.out.printf("Geef een nummer voor de actie die u wilt uitvoeren: %n"
                 + "1: Toon spelers | 2:  Toon gebieden | 3: Plaats stamleden | 4: Beurt overslaan%n");
         nummer = invoer.nextInt();
-        }while(nummer < 1 || nummer > 3);
+        }while(nummer < 1 || nummer > 4);
         
         //Witte lijn voor overzicht
         System.out.println();
@@ -176,22 +176,34 @@ public class StenenTijdperkApplicatie
                 }while(controleerStamleden(aantal) == false);
                 
                 plaatsStamleden(gebiedNummer, aantal, gebiedenLijst);
+                beurtOverslaan(SpelerLijst);
+                toonMenuMetKeuze(SpelerLijst, gebiedenLijst);
             break;
             case 4:
-                //nummer van speler aan beurt verhoogt
-                nummerVerhogen(SpelerLijst);
-                
-                ;
+                beurtOverslaan(SpelerLijst);
+                toonMenuMetKeuze(SpelerLijst, gebiedenLijst);
             break;
         }
         
     }
 
-    private static int nummerVerhogen(Speler[] SpelerLijst)
+    private static void beurtOverslaan(Speler[] SpelerLijst)
     {
+        int nummer=1;
         
-        if(SpelerLijst[4].getNummer() == 4)
-            //beurt speler 1
+        for (Speler SpelerLijst1 : SpelerLijst) {
+            if (SpelerLijst1.getAanBeurt()) {
+                nummer = SpelerLijst1.getNummer();
+                SpelerLijst1.setAanBeurt(false);
+            }  
+        }
+        
+        if (nummer == SpelerLijst.length)
+            nummer = 1;
+        else
+            nummer += 1;
+        
+            SpelerLijst[nummer-1].setAanBeurt(true);
     }
     
     private static void plaatsStamleden(int gebiedNummer, int aantalStamleden, Gebied[] gebiedenLijst)
