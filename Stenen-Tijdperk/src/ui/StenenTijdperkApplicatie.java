@@ -28,7 +28,7 @@ public class StenenTijdperkApplicatie
             catch (InputMismatchException begin) 
             {
                 invoer.nextLine();
-                System.out.println("Geef een int!");
+                System.out.println("Voer een getal in!");
             }
         } while (aantalSpelers < 2 || aantalSpelers > 4);
 
@@ -117,8 +117,9 @@ public class StenenTijdperkApplicatie
     private static Gebied[] aanmakenGebieden()
     {
         //Lijst voor alle gebieden op te slaan, nummer 7 aan te passen adhv kaarten voor hutten
-        Gebied[] gebiedLijst = new Gebied[7];
+        Gebied[] gebiedLijst = new Gebied[8];
         //Constructors vd gebieden
+        // Gebied(gebiedNaam, max aantal stamleden, functie, gebiedNummer)
         Gebied hut = new Gebied("hut",2,"extra stamlid", 1);
         gebiedLijst[0] = hut;
         
@@ -139,6 +140,9 @@ public class StenenTijdperkApplicatie
         
         Gebied rivier = new Gebied("rivier",7,"goud + x",7);
         gebiedLijst[6] = rivier;
+        
+        Gebied gereedschapmaker = new Gebied("gereedschapmaker",1,"+ gereedschapfiche",8);
+        gebiedLijst[7] = gereedschapmaker;
         
         //return van de lijst met de gebied-objecten in
         return gebiedLijst;
@@ -168,7 +172,7 @@ public class StenenTijdperkApplicatie
             catch (InputMismatchException begin) 
             {
                 invoer.nextLine();
-                System.out.println("Geef een int!");
+                System.out.println("Voer een getal in!");
             }
         }while(nummer < 1 || nummer > 4);
         
@@ -200,7 +204,7 @@ public class StenenTijdperkApplicatie
                     catch(InputMismatchException plaatsStamleden)
                     {
                     invoer.nextLine();
-                    System.out.println("Geef een int!");
+                    System.out.println("Voer een getal in!");
                     }
                 }while(gebiedNummer < 0 || gebiedNummer > 7);
                 
@@ -214,7 +218,7 @@ public class StenenTijdperkApplicatie
                     catch(InputMismatchException aantalStamleden)
                     {
                     invoer.nextLine();
-                    System.out.println("Geef een int!");
+                    System.out.println("Voer een getal in!");
                     }
                 }while(controleerStamleden(aantal, spelerLijst, gebiedLijst, gebiedNummer) == false);
                 

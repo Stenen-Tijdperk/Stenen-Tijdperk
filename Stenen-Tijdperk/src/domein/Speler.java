@@ -171,8 +171,29 @@ public final class Speler {
     @Override
     public String toString()
     {
-        return String.format("%n%s: %d %10s | KLEUR : %6s | Aantal ongebruikte stamleden: %d | Aantal hout: %2d | Aantal leem: %2d | Aantal steen: %2d | Aantal goud:  %2d | Aantal voedsel: %2d%n | Aan de beurt: %3s",
+        String leeg = "";
+        return String.format("%n%s: %d %10s | KLEUR:%9s | Aantal ongebruikte stamleden: %4d | Aan de beurt: %3s %18s |%n "
+                    + "%20s| Aantal hout: %2d | Aantal leem: %2d | Aantal steen: %2d | Aantal goud: %2d | Aantal voedsel: %2d |%n",
+                this.getClass().getSimpleName().toUpperCase(), 
+                getNummer(), 
+                getNaamSpeler(),
+                getKleur(), 
+                getAantalStamleden(),
+                getAanBeurt()?"ja":"nee",
+                leeg,
+                leeg,
+                getAantalHout(),
+                getAantalLeem(), 
+                getAantalSteen(), 
+                getAantalGoud(), 
+                getAantalVoedsel()
+                );
+        
+      
+       /*
+        return String.format("%n%s: %d %10s | KLEUR:%5s | Aantal ongebruikte stamleden: %d | Aantal hout: %2d | Aantal leem: %2d | Aantal steen: %2d | Aantal goud:  %2d | Aantal voedsel: %2d%n | Aan de beurt: %3s",
                 this.getClass().getSimpleName().toUpperCase(), getNummer(), getNaamSpeler(), getKleur(), getAantalStamleden(),
                 getAantalHout(), getAantalLeem(), getAantalSteen(), getAantalGoud(), getAantalVoedsel(), getAanBeurt()?"ja":"nee");
+        */
     }
 }
