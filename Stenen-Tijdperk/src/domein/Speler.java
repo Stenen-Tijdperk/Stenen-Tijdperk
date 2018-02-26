@@ -10,7 +10,7 @@ public final class Speler {
     private int aantalGoud;
     private int aantalVoedsel;
     private final String naamSpeler;
-    private static String kleur;
+    private String kleur;
             
     
     /*

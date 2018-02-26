@@ -23,6 +23,8 @@ public class StenenTijdperkApplicatie
         
         //In deze array worden de spelers hun objecten/namen opgeslagen
         Speler[] SpelerLijst = new Speler[aantalSpelers];
+            
+        String[] kleurenLijst = {"rood", "geel", "groen", "blauw"};
         
         //Witte lijn voor overzicht
         System.out.println();
@@ -43,7 +45,7 @@ public class StenenTijdperkApplicatie
             }while(naamSpeler.length() >= 10);
             
             //CONSTRUCTOR VAN SPELER: NAAM, HOUT, LEEM, STEEN, GOUD, VOEDSEL, KLEUR
-            Speler speler = new Speler(naamSpeler, 0,0,0,0,12, "");
+            Speler speler = new Speler(naamSpeler, 0,0,0,0,12, kleurenLijst[i]);
             
             //Speler opslaan in de lijst
             SpelerLijst[i] = speler;
@@ -57,8 +59,12 @@ public class StenenTijdperkApplicatie
         System.out.printf("Het spel is begonnen met %d spelers.%n", SpelerLijst.length);
         //Geef menu met keuzes
         bepaalRandomSpelerAanBeurt(SpelerLijst);
-        toonMenuMetKeuze(SpelerLijst);
-        System.out.println(toonArray(aanmakenGebieden()));
+        
+        Gebied[] gebiedenLijst = aanmakenGebieden();
+        
+        toonMenuMetKeuze(SpelerLijst, gebiedenLijst);
+        
+        System.out.println();
         
             
     }
@@ -93,31 +99,47 @@ public class StenenTijdperkApplicatie
         Gebied[] gebiedenLijst = new Gebied[7];
         //Constructors vd gebieden
         Gebied hut = new Gebied("hut",2,"extra stamlid");
+        gebiedenLijst[0] = hut;
+        
         Gebied akker = new Gebied("akker",1,"voedselproductie + 1");
-        Gebied jacht = new Gebied("jacht",80,"voedsel + x");
+        gebiedenLijst[1] = akker;
+        
+        Gebied jacht = new Gebied("jacht",40,"voedsel + x");
+        gebiedenLijst[2] = jacht;
+        
         Gebied bos = new Gebied("bos",7,"hout + x");
+        gebiedenLijst [3] = bos;
+        
         Gebied leemgroeve = new Gebied("leemgroeve",7,"leem + x");
+        gebiedenLijst[4] = leemgroeve;
+        
         Gebied steengroeve = new Gebied("steengroeve",7,"steen + x");
+        gebiedenLijst[5] = steengroeve;
+        
         Gebied rivier = new Gebied("rivier",7,"goud + x");
+        gebiedenLijst[6] = rivier;
+        
         //return van de lijst met de gebied-objecten in
         return gebiedenLijst;
     }
     
-    private static String toonArrayGebieden(Gebied[] gebiedenLijst)
+    private static void toonArrayGebieden(Gebied[] gebiedenLijst)
     {
-        for (Gebied loper : gebiedenLijst)
-            System.out.println();
+        for (int loper=0;gebiedenLijst.length>loper;loper++)
+        {
+            System.out.print(gebiedenLijst[loper].toString());
+        }
     }
     
-    private static void toonMenuMetKeuze(Speler[] SpelerLijst)
+    private static void toonMenuMetKeuze(Speler[] SpelerLijst, Gebied[] gebiedenLijst)
     {
         Scanner invoer = new Scanner(System.in);
         int nummer;
         do{
         System.out.printf("Geef een nummer voor de actie die u wilt uitvoeren: %n"
-                + "1: toon spelers | 2: plaats stamleden | ...%n");
+                + "1: Toon spelers | 2:  Toon gebieden | 3: Plaats stamleden ...%n");
         nummer = invoer.nextInt();
-        }while(nummer < 1 || nummer > 2);
+        }while(nummer < 1 || nummer > 3);
         
         //Witte lijn voor overzicht
         System.out.println();
@@ -127,10 +149,26 @@ public class StenenTijdperkApplicatie
         {
             case 1: toonSpelers(SpelerLijst);
             break;
-            //case 2: plaatsStamleden()/*+ actie dat het van speler aan beurt veranderd*/;
-            //break;
+            case 2: toonArrayGebieden(gebiedenLijst);
+            break;
+            case 3:
+                toonArrayGebieden(gebiedenLijst);
+                System.out.println();
+                System.out.print("Waar wil je uw stamleden plaatsen?");
+                
+                
+                System.out.print("Hoeveel stamleden wil je er plaatsen?");
+                int aantal = invoer.nextInt();
+                plaatsStamleden(plaats, aantal);
+            break;
         }
         
+    }
+
+    private static void plaatsStamleden(Gebied gebied, int aantalStamleden)
+    {
+        
+    
     }
 
     public void start() throws InterruptedException
