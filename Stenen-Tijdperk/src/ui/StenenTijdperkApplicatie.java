@@ -3,6 +3,7 @@ package ui;
 import domein.Gebied;
 import domein.Hut;
 import domein.Speler;
+
 import java.security.SecureRandom;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -128,7 +129,7 @@ public class StenenTijdperkApplicatie
         gebiedLijst[2] = jacht;
         
         Gebied bos = new Gebied("bos",7,"hout + x",4);
-        gebiedLijst [3] = bos;
+        gebiedLijst[3] = bos;
         
         Gebied leemgroeve = new Gebied("leemgroeve",7,"leem + x",5);
         gebiedLijst[4] = leemgroeve;
@@ -187,20 +188,39 @@ public class StenenTijdperkApplicatie
             case 3:
                 toonGebieden(gebiedLijst);
                 System.out.println();
-                int gebiedNummer, aantal;
+                int gebiedNummer = 0, aantal = 0;
                 
                 do{
-                System.out.print("Waar wil je uw stamleden plaatsen? ");
-                gebiedNummer = invoer.nextInt();
+                    try
+                    {
+                    System.out.print("Waar wil je uw stamleden plaatsen? ");
+                    gebiedNummer = invoer.nextInt();
+                    invoer.nextLine();
+                    }
+                    catch(InputMismatchException plaatsStamleden)
+                    {
+                    invoer.nextLine();
+                    System.out.println("Geef een int!");
+                    }
                 }while(gebiedNummer < 0 || gebiedNummer > 7);
                 
                 do{
-                System.out.print("Hoeveel stamleden wil je er plaatsen? ");
-                aantal = invoer.nextInt();
+                    try
+                    {
+                    System.out.print("Hoeveel stamleden wil je er plaatsen? ");
+                    aantal = invoer.nextInt();
+                    invoer.nextLine();
+                    }
+                    catch(InputMismatchException aantalStamleden)
+                    {
+                    invoer.nextLine();
+                    System.out.println("Geef een int!");
+                    }
                 }while(controleerStamleden(aantal, spelerLijst, gebiedLijst, gebiedNummer) == false);
                 
+               
                 // zoveel stamleden op die plek plaatsen
-                System.out.printf("%nEr werden %d stamleden geplaatst op %s%n%n", aantal, gebiedLijst[gebiedNummer-1].getNaamGebied());
+                System.out.printf("%nEr %s %d %s geplaatst op %s%n%n",aantal>1?"werden":"werd", aantal, aantal>1?"stamleden":"stamlid", gebiedLijst[gebiedNummer-1].getNaamGebied());
                 
                 plaatsStamleden(gebiedNummer, aantal, gebiedLijst, spelerLijst);
                 beurtOverslaan(spelerLijst);
@@ -234,7 +254,7 @@ public class StenenTijdperkApplicatie
         }
     }
 
-    private static boolean controleerStamleden(int aantal, Speler[] spelerLijst, Gebied[] gebiedLijst, int nummerGebied)
+    private static boolean controleerStamleden(int aantal, Speler[] spelerLijst, Gebied[] gebiedLijst, int gebiedNummer)
     {
         //aantal stamleden dat ge hebt
         int spelerNummer = 0; 
@@ -247,6 +267,12 @@ public class StenenTijdperkApplicatie
             }  
         }
         
+        if (gebiedNummer == 1 && aantal !=2)
+        {
+            oke = false;
+            System.out.println("Op de hut moet je 2 stamleden zetten.");
+        }
+        
         if(aantal > spelerLijst[spelerNummer-1].getAantalStamleden() || aantal < 0)
         {
             oke = false;
@@ -254,7 +280,7 @@ public class StenenTijdperkApplicatie
         }
         
         //aantal stamleden reeds op plek
-        if(gebiedLijst[nummerGebied].getAantalMaxLeden() - gebiedLijst[nummerGebied].getAantalGenomenPlaatsen() < aantal)
+        if(gebiedLijst[gebiedNummer-1].getAantalMaxLeden() - gebiedLijst[gebiedNummer-1].getAantalGenomenPlaatsen() < aantal)
         {           
             oke = false;
             System.out.println("Je gaf een te hoog aantal stamleden in voor dit gebied.");
@@ -325,4 +351,3 @@ public class StenenTijdperkApplicatie
         
     } 
 }
-
