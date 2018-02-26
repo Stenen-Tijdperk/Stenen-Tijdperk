@@ -1,6 +1,7 @@
 package ui;
 
 import domein.Gebied;
+import domein.Hut;
 import domein.Speler;
 import java.security.SecureRandom;
 import java.util.Scanner;
@@ -26,8 +27,12 @@ public class StenenTijdperkApplicatie
         
         //Gebieden worden aangemaakt
         Gebied[] gebiedenLijst = aanmakenGebieden();
+        
+        //Hutten worden aangemaakt
+        Hut[] huttenLijst = generateHutten();
             
         String[] kleurenLijst = {"rood", "geel", "groen", "blauw"};
+        int[] nummerkesLijst = {1,2,3,4};
         
         //Witte lijn voor overzicht
         System.out.println();
@@ -48,7 +53,7 @@ public class StenenTijdperkApplicatie
             }while(naamSpeler.length() >= 10);
             
             //CONSTRUCTOR VAN SPELER: NAAM, HOUT, LEEM, STEEN, GOUD, VOEDSEL, KLEUR
-            Speler speler = new Speler(naamSpeler, 0,0,0,0,12, kleurenLijst[i], 5);
+            Speler speler = new Speler(naamSpeler, 0,0,0,0,12, kleurenLijst[i], 5, nummerkesLijst[i]);
             
             //Speler opslaan in de lijst
             SpelerLijst[i] = speler;
@@ -73,11 +78,7 @@ public class StenenTijdperkApplicatie
         for (Speler loper : SpelerLijst) {
             //toString van klasse Speler oproepen
             System.out.print(loper.toString());
-            //mooi lijntje
-            for (int j = 0; j < 129; j++)
-            {
-                System.out.print("_");
-            }
+            
             System.out.println();
         }
     }
@@ -152,8 +153,12 @@ public class StenenTijdperkApplicatie
         switch(nummer)
         {
             case 1: toonSpelers(SpelerLijst);
+                    System.out.println();
+                    toonMenuMetKeuze(SpelerLijst, gebiedenLijst);
             break;
             case 2: toonArrayGebieden(gebiedenLijst);
+                    System.out.println();
+                    toonMenuMetKeuze(SpelerLijst, gebiedenLijst);
             break;
             case 3:
                 toonArrayGebieden(gebiedenLijst);
@@ -172,12 +177,23 @@ public class StenenTijdperkApplicatie
                 
                 plaatsStamleden(gebiedNummer, aantal, gebiedenLijst);
             break;
-            case 4: ;
+            case 4:
+                //nummer van speler aan beurt verhoogt
+                nummerVerhogen(SpelerLijst);
+                
+                ;
             break;
         }
         
     }
 
+    private static int nummerVerhogen(Speler[] SpelerLijst)
+    {
+        
+        if(SpelerLijst[4].getNummer() == 4)
+            //beurt speler 1
+    }
+    
     private static void plaatsStamleden(int gebiedNummer, int aantalStamleden, Gebied[] gebiedenLijst)
     {
         setAantalStamleden(getAantalStamleden() - aantalStamleden);
@@ -199,6 +215,41 @@ public class StenenTijdperkApplicatie
     public void start() throws InterruptedException
     {
         
+    }
+    
+    public static Hut[] generateHutten()
+    {
+        //Hutlijst wordt aangemaakt, alle hutten zijn null
+        Hut[] hutLijst = new Hut[28];
+        
+        int hout = 0, leem = 0, steen = 0, goud = 0, getal = 0;
+        
+        for (int aantalHutten=0;aantalHutten<=27;aantalHutten++)
+        {
+            SecureRandom random = new SecureRandom();
+            for(int loper=0;loper==3;loper++)
+            {
+                getal= random.nextInt(4);
+
+                switch(getal)
+                {
+                    case 1: hout++;
+                    break;
+                    case 2: leem++;
+                    break;
+                    case 3: steen++;
+                    break;
+                    case 4: goud++;
+                }
+            }
+        
+        //Hut wordt aangemaakt
+        Hut hut = new Hut(hout, leem, steen, goud, aantalHutten);
+        //Hut wordt opgeslagen
+        hutLijst[aantalHutten] = hut;
+        
+        }
+        return hutLijst;
     }
 }
 

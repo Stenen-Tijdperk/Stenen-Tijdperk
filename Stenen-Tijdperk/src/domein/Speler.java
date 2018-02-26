@@ -10,13 +10,22 @@ public final class Speler {
     private int aantalGoud;
     private int aantalVoedsel;
     private int aantalStamleden;
+    private int nummer;
+
+    public int getNummer() {
+        return nummer;
+    }
+
+    public void setNummer(int nummer) {
+        this.nummer = nummer;
+    }
     
     private String naamSpeler;
     private String kleur;
     
     private boolean aanBeurt = false;
             
-    public Speler(String naamSpeler, int aantalHout, int aantalLeem, int aantalSteen, int aantalGoud, int aantalVoedsel, String kleur, int aantalStamleden)
+    public Speler(String naamSpeler, int aantalHout, int aantalLeem, int aantalSteen, int aantalGoud, int aantalVoedsel, String kleur, int aantalStamleden, int nummer)
     {
         setNaamSpeler(naamSpeler);
         setAantalHout(aantalHout);
@@ -26,6 +35,7 @@ public final class Speler {
         setAantalVoedsel(aantalVoedsel);
         setKleur(kleur);
         setAantalStamleden(aantalStamleden);
+        setNummer(nummer);
     }
     
     public void gebruikGereedschapsfische(Gereedschapsfiche gereedschap)
@@ -136,9 +146,9 @@ public final class Speler {
     @Override
     public String toString()
     {
-        return String.format("%n%s %10s | KLEUR : %6s | Aantal hout: %2d | Aantal leem: %2d | Aantal steen: %2d | Aantal goud:  %2d | Aantal voedsel: %2d%n",
-                this.getClass().getSimpleName().toUpperCase(), getNaamSpeler(), getKleur(),
-                getAantalHout(), getAantalLeem(), getAantalSteen(), getAantalGoud(), getAantalVoedsel());
+        return String.format("%n%s: %d %10s | KLEUR : %6s | Aantal ongebruikte stamleden: %d | Aantal hout: %2d | Aantal leem: %2d | Aantal steen: %2d | Aantal goud:  %2d | Aantal voedsel: %2d%n | Aan de beurt: %3s",
+                this.getClass().getSimpleName().toUpperCase(), getNummer(), getNaamSpeler(), getKleur(), getAantalStamleden(),
+                getAantalHout(), getAantalLeem(), getAantalSteen(), getAantalGoud(), getAantalVoedsel(), getAanBeurt()?"ja":"nee");
     }
 
     private void setNaamSpeler(String naamSpeler)
