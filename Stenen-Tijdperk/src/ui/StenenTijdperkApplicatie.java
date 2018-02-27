@@ -354,12 +354,14 @@ public class StenenTijdperkApplicatie
     private static boolean controleerNaamSpelers(Speler[] spelerLijst, String naamSpeler, int spelerNummer)
     {
         boolean oke = true;
+        //Naam mag niet langer als 10 characters zijn
         if (naamSpeler.length() >= 10)
         {
             oke = false;
             System.out.println("De naam is te lang. Maximum 10 characters!");
         }
         
+        //Naam mag niet 2 keer dezelfde zijn.
         for (Speler loper : spelerLijst) {
             switch(spelerNummer)
             {
@@ -369,27 +371,26 @@ public class StenenTijdperkApplicatie
                     if(Objects.equals(naamSpeler.toLowerCase(), spelerLijst[spelerNummer-1].getNaam().toLowerCase()) == true)
                     {
                         oke = false;
-                        System.out.println("Deze naam is al genomen.");
-                        break;
                     }
                     break;
                 case 2:
                     if(Objects.equals(naamSpeler.toLowerCase(), spelerLijst[spelerNummer-2].getNaam().toLowerCase()) == true)
                     {
                         oke = false;
-                        System.out.println("Deze naam is al genomen.");
-                        break;
                     } 
                     break;
                 case 3:
                     if(Objects.equals(naamSpeler.toLowerCase(), spelerLijst[spelerNummer-3].getNaam().toLowerCase()) == true)
                     {
                         oke = false;
-                        System.out.println("Deze naam is al genomen.");
-                        break;
                     } 
                     break;
             }
+                    if (oke == false)
+                    {
+                        System.out.println("De naam is al genomen.");
+                        break;
+                    }
         }
 
         return oke;
