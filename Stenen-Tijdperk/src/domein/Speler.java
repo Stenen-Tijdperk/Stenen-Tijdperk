@@ -11,22 +11,22 @@ public final class Speler {
     private int aantalVoedsel;
     private int aantalStamleden;
     private int nummer;
-    private String naamSpeler;
+    private String naam;
     private String kleur;
     private boolean aanBeurt = false;
     
-    public Speler(String naamSpeler, int aantalHout, int aantalLeem, int aantalSteen, int aantalGoud, int aantalVoedsel, String kleur, int aantalStamleden, int nummer, boolean aanBeurt)
+    public Speler(String naam, int nummer, String kleur, boolean aanBeurt, int aantalStamleden, int aantalHout, int aantalLeem, int aantalSteen, int aantalGoud, int aantalVoedsel)
     {
-        setNaamSpeler(naamSpeler);
+        setNaam(naam);
+        setNummer(nummer);
+        setKleur(kleur);
+        setAanBeurt(aanBeurt);
+        setAantalStamleden(aantalStamleden);
         setAantalHout(aantalHout);
         setAantalLeem(aantalLeem);
         setAantalSteen(aantalSteen);
         setAantalGoud(aantalGoud);
         setAantalVoedsel(aantalVoedsel);
-        setKleur(kleur);
-        setAantalStamleden(aantalStamleden);
-        setNummer(nummer);
-        setAanBeurt(aanBeurt);
     }
       
     public void gebruikGereedschapsfische(Gereedschapsfiche gereedschap)
@@ -83,11 +83,11 @@ public final class Speler {
         this.aantalGoud = aantalGoud;
     }
     
-     private void setNaamSpeler(String naamSpeler)
+     private void setNaam(String naam)
     {
-        if (naamSpeler.length() > 10)
+        if (naam.length() > 10)
             throw new IllegalArgumentException("Naam van de speler is te lang!");
-        this.naamSpeler = naamSpeler;
+        this.naam = naam;
     }
     
     public void setKleur(String kleur)
@@ -153,9 +153,9 @@ public final class Speler {
         return aantalVoedsel;
     }
     
-    public String getNaamSpeler()
+    public String getNaam()
     {
-        return naamSpeler;
+        return naam;
     }
     
     public int getAantalStamleden()
@@ -176,7 +176,7 @@ public final class Speler {
                     + "%20s| Aantal hout: %2d | Aantal leem: %2d | Aantal steen: %2d | Aantal goud: %2d | Aantal voedsel: %2d |%n",
                 this.getClass().getSimpleName().toUpperCase(), 
                 getNummer(), 
-                getNaamSpeler(),
+                getNaam(),
                 getKleur(), 
                 getAantalStamleden(),
                 getAanBeurt()?"ja":"nee",
@@ -188,12 +188,5 @@ public final class Speler {
                 getAantalGoud(), 
                 getAantalVoedsel()
                 );
-        
-      
-       /*
-        return String.format("%n%s: %d %10s | KLEUR:%5s | Aantal ongebruikte stamleden: %d | Aantal hout: %2d | Aantal leem: %2d | Aantal steen: %2d | Aantal goud:  %2d | Aantal voedsel: %2d%n | Aan de beurt: %3s",
-                this.getClass().getSimpleName().toUpperCase(), getNummer(), getNaamSpeler(), getKleur(), getAantalStamleden(),
-                getAantalHout(), getAantalLeem(), getAantalSteen(), getAantalGoud(), getAantalVoedsel(), getAanBeurt()?"ja":"nee");
-        */
     }
 }

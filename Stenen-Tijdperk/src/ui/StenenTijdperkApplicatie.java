@@ -6,45 +6,48 @@ import domein.Speler;
 
 import java.security.SecureRandom;
 import java.util.InputMismatchException;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class StenenTijdperkApplicatie 
 {
     public static void main (String[] args)
     {
+        //Object van de scanner aanmaken
         Scanner invoer = new Scanner(System.in);
         
-        //Keuze voor het aantal spelers
-        //Indien foute ingave van keuze - controle
         int aantalSpelers = 0;
         
+        //Aantal spelers, indien fout aantal gegeven, correcte error message
         do {
+            //Try and catch zodat het programma niet crasht bij foute ingave
             try 
             {
                 System.out.print("Geef het aantal spelers tussen 2 en 4: ");
                 aantalSpelers = invoer.nextInt();
                 invoer.nextLine();
             } 
-            catch (InputMismatchException begin) 
+            catch (InputMismatchException keuzeAantalSpelers) 
             {
                 invoer.nextLine();
                 System.out.println("Voer een getal in!");
             }
+            //Minstens 2 spelers, maximum 4 spelers
         } while (aantalSpelers < 2 || aantalSpelers > 4);
-
 
         //In deze array worden de spelers hun objecten/namen opgeslagen
         Speler[] spelerLijst = new Speler[aantalSpelers];
-        
-        
-        
+                
         //Gebieden worden aangemaakt
         Gebied[] gebiedLijst = aanmakenGebieden();
         
         //Hutten worden aangemaakt
         Hut[] huttenLijst = aanmakenHutten();
-            
-        String[] kleurenLijst = {"rood", "geel", "groen", "blauw"};
+        
+        //De kleuren van de spelers
+        String[] kleurenLijst = {"rood", "blauw", "groen", "geel"};
+        
+        //De nummers van de spelers
         int[] nummersLijst = {1,2,3,4};
         
         //Witte lijn voor overzicht
@@ -55,20 +58,16 @@ public class StenenTijdperkApplicatie
         {
             String naamSpeler;
             
-            //Kies spelernaam, speler naam kan niet meer als 10 characters hebben
+            //Kies spelernaam
             do{
-                //PRINT FORMAT VOOR SPELER NUMMER
                 System.out.printf("Geef naam van speler %d: ", i+1);
                 naamSpeler = invoer.next();
-                //Fout error voor als naam te lang is
-                if (naamSpeler.length() >= 10)
-                {
-                    System.out.printf("Naam is te lang! Probeer opnieuw!%n");
-                }
-            }while(naamSpeler.length() >= 10);
+                //De namen van de spelers controleren
+            }while(controleerNaamSpelers(spelerLijst, naamSpeler, i) == false);
             
-            //CONSTRUCTOR VAN SPELER: NAAM, HOUT, LEEM, STEEN, GOUD, VOEDSEL, KLEUR
-            Speler speler = new Speler(naamSpeler, 0,0,0,0,12, kleurenLijst[i], 5, nummersLijst[i], false);
+    
+            //Constructor van de speler: naam, nummer, kleur, aanBeurt, aantalStamleden, aantalHout, aantalLeem, aantalSteen, aantalGoud, aantalVoedsel
+            Speler speler = new Speler(naamSpeler, nummersLijst[i], kleurenLijst[i], false, 5, 0, 0, 0, 0,12);
             
             //Speler opslaan in de lijst
             spelerLijst[i] = speler;
@@ -79,8 +78,10 @@ public class StenenTijdperkApplicatie
                 
         //Print out dat spel is begonnen
         System.out.printf("Het spel is begonnen met %d spelers.%n", spelerLijst.length);
+        
         // bepalen van speler die begint
         bepaalRandomSpelerAanBeurt(spelerLijst);
+        
         //Geef menu met keuzes
         toonMenuMetKeuze(spelerLijst, gebiedLijst);
         
@@ -105,7 +106,7 @@ public class StenenTijdperkApplicatie
         
         //Speler int nummer is aan beurt
         int nummer = random.nextInt(spelerLijst.length);
-        System.out.printf("Speler %s mag beginnen.%n", spelerLijst[nummer].getNaamSpeler());
+        System.out.printf("Speler %s mag beginnen.%n", spelerLijst[nummer].getNaam());
         
         //Beurt wordt true gezet bij random bepaalde speler
         spelerLijst[nummer].setAanBeurt(true);
@@ -348,6 +349,50 @@ public class StenenTijdperkApplicatie
             hutLijst[aantalHutten] = hut;
         }
         return hutLijst;
+    }
+
+    private static boolean controleerNaamSpelers(Speler[] spelerLijst, String naamSpeler, int spelerNummer)
+    {
+        boolean oke = true;
+        if (naamSpeler.length() >= 10)
+        {
+            oke = false;
+            System.out.println("De naam is te lang. Maximum 10 characters!");
+        }
+        
+        for (Speler loper : spelerLijst) {
+            switch(spelerNummer)
+            {
+                case 0: 
+                    break;
+                case 1:
+                    if(Objects.equals(naamSpeler.toLowerCase(), spelerLijst[spelerNummer-1].getNaam().toLowerCase()) == true)
+                    {
+                        oke = false;
+                        System.out.println("Deze naam is al genomen.");
+                        break;
+                    }
+                    break;
+                case 2:
+                    if(Objects.equals(naamSpeler.toLowerCase(), spelerLijst[spelerNummer-2].getNaam().toLowerCase()) == true)
+                    {
+                        oke = false;
+                        System.out.println("Deze naam is al genomen.");
+                        break;
+                    } 
+                    break;
+                case 3:
+                    if(Objects.equals(naamSpeler.toLowerCase(), spelerLijst[spelerNummer-3].getNaam().toLowerCase()) == true)
+                    {
+                        oke = false;
+                        System.out.println("Deze naam is al genomen.");
+                        break;
+                    } 
+                    break;
+            }
+        }
+
+        return oke;
     }
         
     public void start() throws InterruptedException
