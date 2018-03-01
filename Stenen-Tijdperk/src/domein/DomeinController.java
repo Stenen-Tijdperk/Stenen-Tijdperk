@@ -7,17 +7,30 @@ import java.util.Scanner;
 
 public class DomeinController
 {
-    private static Speler[] spelerLijstMaken(int aantalSpelers)
+    private Speler[] spelerLijst;
+    private Gebied[] gebiedLijst;
+    
+    private Speler[] getSpelerLijst()
     {
-        //In deze array worden de spelers hun objecten/namen opgeslagen
-        Speler[] spelerLijst = new Speler[aantalSpelers];
         return spelerLijst;
     }
     
-    private static void toonSpelers(Speler[] spelerLijst)
+    private Gebied[] getGebiedLijst()
+    {
+        return gebiedLijst;
+    }
+    
+    public void spelerLijstMaken(int aantalSpelers)
+    {
+        //In deze array worden de spelers hun objecten/namen opgeslagen
+        Speler[] spelerLijst = new Speler[aantalSpelers];
+        this.spelerLijst = spelerLijst;
+    }
+    
+    public void toonSpelers()
     {
         //Spelers eens afprinten
-        for (Speler loper : spelerLijst) 
+        for (Speler loper : getSpelerLijst()) 
         {
             //toString van klasse Speler oproepen
             System.out.print(loper.toString());
@@ -26,25 +39,25 @@ public class DomeinController
         }
     }
     
-    private static void bepaalRandomSpelerAanBeurt(Speler[] spelerLijst)
+    public void bepaalRandomSpelerAanBeurt()
     {
         SecureRandom random = new SecureRandom();
         
         //Speler int nummer is aan beurt
-        int nummer = random.nextInt(spelerLijst.length);
-        System.out.printf("Speler %s mag beginnen.%n", spelerLijst[nummer].getNaam());
+        int nummer = random.nextInt(getSpelerLijst().length);
+        System.out.printf("Speler %s mag beginnen.%n", getSpelerLijst()[nummer].getNaam());
         
         //Beurt wordt true gezet bij random bepaalde speler
-        spelerLijst[nummer].setAanBeurt(true);
+        getSpelerLijst()[nummer].setAanBeurt(true);
         
         System.out.println();
     }
     
     // de verschillende gebieden maken
-    private static Gebied[] aanmakenGebieden()
-    {
+    public void aanmakenGebieden()
+    {   
         //Lijst voor alle gebieden op te slaan, nummer 7 aan te passen adhv kaarten voor hutten
-        Gebied[] gebiedLijst = new Gebied[8];
+        this.gebiedLijst = new Gebied[8];
         //Constructors vd gebieden
         // Gebied(gebiedNaam, max aantal stamleden, functie, gebiedNummer)
         Gebied hut = new Gebied("hut",2,"extra stamlid", 1);
@@ -70,109 +83,125 @@ public class DomeinController
         
         Gebied gereedschapmaker = new Gebied("gereedschapmaker",1,"+ gereedschapfiche",8);
         gebiedLijst[7] = gereedschapmaker;
-        
-        //return van de lijst met de gebied-objecten in
-        return gebiedLijst;
     }
     
-    private static void toonGebieden(Gebied[] gebiedLijst)
+    public void toonGebieden()
     {
-        for (int loper=0;gebiedLijst.length>loper;loper++)
+        for (int loper=0;getGebiedLijst().length>loper;loper++)
         {
-            System.out.print(gebiedLijst[loper].toString());
+            System.out.print(getGebiedLijst()[loper].toString());
         }
     }
     
-    private static void toonMenuMetKeuze(Speler[] spelerLijst, Gebied[] gebiedLijst)
+    public void toonMenuMetKeuze()
     {
         Scanner invoer = new Scanner(System.in);
         int nummer=0;
         
-        do{
-            try
-            {
-                System.out.printf("Geef een nummer voor de actie die u wilt uitvoeren: %n"
-                + "1: Toon spelers | 2:  Toon gebieden | 3: Plaats stamleden | 4: Beurt overslaan%n");
-                nummer = invoer.nextInt();
-                invoer.nextLine();
-            }
-            catch (InputMismatchException begin) 
-            {
-                invoer.nextLine();
-                System.out.println("Voer een getal in!");
-            }
-        }while(nummer < 1 || nummer > 4);
-        
-        //Witte lijn voor overzicht
-        System.out.println();
-        
-        switch(nummer)
+        if(controleerAlleStamledenGeplaatst() == true)
         {
-            case 1: toonSpelers(spelerLijst);
-                    System.out.println();
-                    toonMenuMetKeuze(spelerLijst, gebiedLijst);
-            break;
-            case 2: toonGebieden(gebiedLijst);
-                    System.out.println();
-                    toonMenuMetKeuze(spelerLijst, gebiedLijst);
-            break;
-            case 3:
-                toonGebieden(gebiedLijst);
-                System.out.println();
-                int gebiedNummer = 0, aantal = 0;
-                
-                do{
-                    try
-                    {
-                    System.out.print("Waar wil je uw stamleden plaatsen? ");
-                    gebiedNummer = invoer.nextInt();
-                    invoer.nextLine();
-                    }
-                    catch(InputMismatchException plaatsStamleden)
-                    {
-                    invoer.nextLine();
-                    System.out.println("Voer een getal in!");
-                    }
-                }while(gebiedNummer < 0 || gebiedNummer > 8);
-                
-                do{
-                    try
-                    {
-                    System.out.print("Hoeveel stamleden wil je er plaatsen? ");
-                    aantal = invoer.nextInt();
-                    invoer.nextLine();
-                    }
-                    catch(InputMismatchException aantalStamleden)
-                    {
-                    invoer.nextLine();
-                    System.out.println("Voer een getal in!");
-                    }
-                }while(controleerStamleden(aantal, spelerLijst, gebiedLijst, gebiedNummer) == false);
-                
-               
-                // zoveel stamleden op die plek plaatsen
-                System.out.printf("%nEr %s %d %s geplaatst op %s%n%n",aantal>1?"werden":"werd", aantal, aantal>1?"stamleden":"stamlid", gebiedLijst[gebiedNummer-1].getNaamGebied());
-                
-                plaatsStamleden(gebiedNummer, aantal, gebiedLijst, spelerLijst);
-                
-                if(aantal != 0)
+            do{
+                try
                 {
-                    beurtOverslaan(spelerLijst);
+                    System.out.printf("Geef een nummer voor de actie die u wilt uitvoeren: %n"
+                    + "1: Toon spelers | 2:  Toon gebieden | 3: Plaats stamleden | 4: Beurt overslaan%n");
+                    nummer = invoer.nextInt();
+                    invoer.nextLine();
                 }
-                toonMenuMetKeuze(spelerLijst, gebiedLijst);
-            break;
-            case 4:
-                beurtOverslaan(spelerLijst);
-                toonMenuMetKeuze(spelerLijst, gebiedLijst);
-            break;
+                catch (InputMismatchException begin) 
+                {
+                    invoer.nextLine();
+                    System.out.println("Voer een getal in!");
+                }
+            }while(nummer < 1 || nummer > 5);
+
+            //Witte lijn voor overzicht
+            System.out.println();
+
+            switch(nummer)
+            {
+                case 1: toonSpelers();
+                        System.out.println();
+                        toonMenuMetKeuze();
+                break;
+                case 2: toonGebieden();
+                        System.out.println();
+                        toonMenuMetKeuze();
+                break;
+                case 3:
+                    toonGebieden();
+                    System.out.println();
+                    int gebiedNummer = 0, aantal = 0;
+
+                    do{
+                        try
+                        {
+                        System.out.print("Waar wil je uw stamleden plaatsen? ");
+                        gebiedNummer = invoer.nextInt();
+                        invoer.nextLine();
+                        }
+                        catch(InputMismatchException plaatsStamleden)
+                        {
+                        System.out.println("Voer een getal in!");
+                        invoer.nextLine();
+                        }
+                    }while(gebiedNummer <= 0 || gebiedNummer > 8);
+
+                    do{
+                        try
+                        {
+                        System.out.print("Hoeveel stamleden wil je er plaatsen? ");
+                        aantal = invoer.nextInt();
+                        invoer.nextLine();
+                        }
+                        catch(InputMismatchException aantalStamleden)
+                        {
+                        System.out.println("Voer een getal in!");
+                        invoer.nextLine();
+                        }
+                    }while(controleerStamleden(aantal, gebiedNummer) == false);
+
+                    // zoveel stamleden op die plek plaatsen
+                    if(aantal > 0)
+                    {
+                        System.out.printf("%nEr %s %d %s geplaatst op het gebied: %s%n%n",aantal>1?"werden":"werd", aantal, aantal>1?"stamleden":"stamlid", gebiedLijst[gebiedNummer-1].getNaamGebied());
+                    }
+                    else
+                    {
+                        System.out.printf("Je hebt geen stamleden geplaats, je blijft aan de beurt.");
+                    }
+
+                    plaatsStamleden(gebiedNummer, aantal);
+
+                    if(aantal != 0)
+                    {
+                        beurtOverslaan();
+                    }
+                    toonMenuMetKeuze();
+                break;
+                case 4:
+                    beurtOverslaan();
+                    toonMenuMetKeuze();
+                break;
+                case 5:
+                    toonMijnStamleden();
+                break;
+            }
+        }
+        else
+        {
+            System.out.println("De ronde voor het plaatsen van de stamleden is afgelopen aangezien elke speler al zijn stamleden geplaatst heeft op het spelbord.");
+            toonSpelers();
+            System.out.println();
+            toonGebieden();
         }
     }
     
-    private static void plaatsStamleden(int gebiedNummer, int aantalStamleden, Gebied[] gebiedLijst, Speler[] spelerLijst)
+    public void plaatsStamleden(int gebiedNummer, int aantalStamleden)
     {   
         int spelerNummer = 0; 
         boolean oke = true; 
-        for (Speler spelerLijst1 : spelerLijst) 
+        for (Speler spelerLijst1 : getSpelerLijst()) 
         {
             if (spelerLijst1.getAanBeurt()) 
             {
@@ -180,8 +209,8 @@ public class DomeinController
             }  
         }
         try{
-        gebiedLijst[gebiedNummer-1].setAantalGenomenPlaatsen(gebiedLijst[gebiedNummer-1].getAantalGenomenPlaatsen()+aantalStamleden);
-        spelerLijst[spelerNummer-1].setAantalStamleden(spelerLijst[spelerNummer-1].getAantalStamleden()-aantalStamleden);
+        getGebiedLijst()[gebiedNummer-1].setAantalGenomenPlaatsen(getGebiedLijst()[gebiedNummer-1].getAantalGenomenPlaatsen()+aantalStamleden);
+        getSpelerLijst()[spelerNummer-1].setAantalStamleden(getSpelerLijst()[spelerNummer-1].getAantalStamleden()-aantalStamleden);
         }
         catch(IllegalArgumentException ex)
         {
@@ -189,12 +218,12 @@ public class DomeinController
         }
     }
 
-    private static boolean controleerStamleden(int aantal, Speler[] spelerLijst, Gebied[] gebiedLijst, int gebiedNummer)
+    public boolean controleerStamleden(int aantal, int gebiedNummer)
     {
         //aantal stamleden dat ge hebt
         int spelerNummer = 0; 
         boolean oke = true; 
-        for (Speler spelerLijst1 : spelerLijst) 
+        for (Speler spelerLijst1 : getSpelerLijst()) 
         {
             if (spelerLijst1.getAanBeurt()) 
             {
@@ -208,14 +237,14 @@ public class DomeinController
             System.out.println("Op de hut moet je 2 stamleden zetten.");
         }
         
-        if(aantal > spelerLijst[spelerNummer-1].getAantalStamleden() || aantal < 0)
+        if(aantal > getSpelerLijst()[spelerNummer-1].getAantalStamleden() || aantal < 0)
         {
             oke = false;
             System.out.println("Je hebt niet zoveel stamleden.");
         }
         
         //aantal stamleden reeds op plek
-        if(gebiedLijst[gebiedNummer-1].getAantalMaxLeden() - gebiedLijst[gebiedNummer-1].getAantalGenomenPlaatsen() < aantal)
+        if(getGebiedLijst()[gebiedNummer-1].getAantalMaxLeden() - getGebiedLijst()[gebiedNummer-1].getAantalGenomenPlaatsen() < aantal)
         {           
             oke = false;
             System.out.println("Je gaf een te hoog aantal stamleden in voor dit gebied.");
@@ -223,11 +252,11 @@ public class DomeinController
         return oke;
     }
 
-    private static void beurtOverslaan(Speler[] spelerLijst)
+    public void beurtOverslaan()
     {
         int nummer=1;
         
-        for (Speler spelerLijst1 : spelerLijst) 
+        for (Speler spelerLijst1 : getSpelerLijst()) 
         {
             if (spelerLijst1.getAanBeurt()) 
             {
@@ -236,7 +265,7 @@ public class DomeinController
             }  
         }
         
-        if (nummer == spelerLijst.length)
+        if (nummer == getSpelerLijst().length)
         {
             nummer = 1;
         }
@@ -244,10 +273,10 @@ public class DomeinController
         {
             nummer += 1;
         }
-        spelerLijst[nummer-1].setAanBeurt(true);
+        getSpelerLijst()[nummer-1].setAanBeurt(true);
     }
 
-    public static Hut[] aanmakenHutten()
+    public void aanmakenHutten()
     {
         //Hutlijst wordt aangemaakt, alle hutten zijn null
         Hut[] hutLijst = new Hut[28];
@@ -278,10 +307,9 @@ public class DomeinController
             //Hut wordt opgeslagen
             hutLijst[aantalHutten] = hut;
         }
-        return hutLijst;
     }
 
-    private static boolean controleerNaamSpelers(Speler[] spelerLijst, String naamSpeler, int spelerNummer)
+    public boolean controleerNaamSpelers(String naamSpeler, int spelerNummer)
     {
         boolean oke = true;
         //Naam mag niet langer als 10 characters zijn
@@ -292,20 +320,20 @@ public class DomeinController
         }
         
         //Naam mag niet 2 keer dezelfde zijn.
-        for (Speler loper : spelerLijst) {
+        for (Speler loper : getSpelerLijst()) {
             switch(spelerNummer)
             {
                 case 0: 
                     break;
                 case 1:
-                    if(Objects.equals(naamSpeler.toLowerCase(), spelerLijst[spelerNummer-1].getNaam().toLowerCase()) == true)
+                    if(Objects.equals(naamSpeler.toLowerCase(), getSpelerLijst()[spelerNummer-1].getNaam().toLowerCase()) == true)
                     {
                         oke = false;
                     }
                     break;
                 case 2:
-                    if(Objects.equals(naamSpeler.toLowerCase(), spelerLijst[spelerNummer-2].getNaam().toLowerCase()) == true 
-                            || Objects.equals(naamSpeler.toLowerCase(), spelerLijst[spelerNummer-1].getNaam().toLowerCase()) == true)
+                    if(Objects.equals(naamSpeler.toLowerCase(), getSpelerLijst()[spelerNummer-2].getNaam().toLowerCase()) == true 
+                            || Objects.equals(naamSpeler.toLowerCase(), getSpelerLijst()[spelerNummer-1].getNaam().toLowerCase()) == true)
                     {
                         oke = false;
                     } 
@@ -326,6 +354,65 @@ public class DomeinController
                     }
         }
 
+        return oke;
+    }
+        
+    public void aanmakenSpeler(int aantalSpelers)
+    {
+        Scanner invoer = new Scanner(System.in);
+        
+        //De kleuren van de spelers
+        String[] kleurenLijst = {"rood", "blauw", "groen", "geel"};
+        
+        //De nummers van de spelers
+        int[] nummersLijst = {1,2,3,4};
+        
+        //Witte lijn voor overzicht
+        System.out.println();
+        
+        //aanmaken van het aantalSpelers
+        for (int i = 0; i < aantalSpelers; i++) 
+        {
+            String naamSpeler;
+            
+            //Kies spelernaam
+            do{
+                System.out.printf("Geef naam van speler %d: ", i+1);
+                naamSpeler = invoer.next();
+                //De namen van de spelers controleren
+            }while(controleerNaamSpelers(naamSpeler, i) == false);
+            
+            //Constructor van de speler: naam, nummer, kleur, aanBeurt, aantalStamleden, aantalHout, aantalLeem, aantalSteen, aantalGoud, aantalVoedsel
+            Speler speler = new Speler(naamSpeler, nummersLijst[i], kleurenLijst[i], false, 5, 0, 0, 0, 0,12);
+            
+            //Speler opslaan in de lijst
+            spelerLijst[i] = speler;
+            
+            //Mooie lijn tussen elke speler
+            System.out.println();
+        }
+    }
+
+    private void toonMijnStamleden() 
+    {
+        
+        
+    }
+
+    private boolean controleerAlleStamledenGeplaatst() 
+    {
+        boolean oke = true;
+        for(int loper=0; loper<getSpelerLijst().length;loper++)
+        {
+            if(getSpelerLijst()[loper].getAantalStamleden() == 0)
+            {
+                oke = false;
+            }
+            else
+            {
+                oke = true;
+            }
+        }
         return oke;
     }
 }
