@@ -16,22 +16,22 @@ public class Gebied
         setNummer(nummer);
     }
     
-    private void setNaamGebied(String naamGebied)
+    private final void setNaamGebied(String naamGebied)
     {
         this.naamGebied = naamGebied;
     }
 
-    private void setAantalMaxLeden(int aantalMaxLeden)
+    private final void setAantalMaxLeden(int aantalMaxLeden)
     {
         this.aantalMaxLeden = aantalMaxLeden;
     }
 
-    private void setFunctie(String functie)
+    private final void setFunctie(String functie)
     {
         this.functie = functie;
     }
     
-    private void setNummer(int nummer)
+    private final void setNummer(int nummer)
     {
         this.nummer = nummer;
     }

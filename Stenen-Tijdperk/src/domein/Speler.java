@@ -28,21 +28,8 @@ public final class Speler {
         setAantalGoud(aantalGoud);
         setAantalVoedsel(aantalVoedsel);
     }
-      
-    public void gebruikGereedschapsfische(Gereedschapsfiche gereedschap)
-    {
-        if (gereedschap.isReedsGebruiktDezeRonde() == true)
-        {
-            throw new IllegalArgumentException("Het gereedschap is reeds gebruikt. Wacht tot de volgende ronde.");
-        }
-        else 
-        {
-            gereedschap.setReedsGebruiktDezeRonde(true);
-            //+ methode voor meer dobbelsteenogen per gereedschapsfichewaarde -Ruben
-        }
-    }
     
-    public void setNummer(int nummer) 
+    public final void setNummer(int nummer) 
     {
         this.nummer = nummer;
     }
@@ -83,14 +70,14 @@ public final class Speler {
         this.aantalGoud = aantalGoud;
     }
     
-     private void setNaam(String naam)
+     private final void setNaam(String naam)
     {
         if (naam.length() > 10)
             throw new IllegalArgumentException("Naam van de speler is te lang!");
         this.naam = naam;
     }
     
-    public void setKleur(String kleur)
+    public final void setKleur(String kleur)
     {
         this.kleur = kleur;
     }

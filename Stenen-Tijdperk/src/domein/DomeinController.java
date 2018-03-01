@@ -9,6 +9,7 @@ public class DomeinController
 {
     private Speler[] spelerLijst;
     private Gebied[] gebiedLijst;
+    private Hut[] hutLijst;
     
     private Speler[] getSpelerLijst()
     {
@@ -20,11 +21,15 @@ public class DomeinController
         return gebiedLijst;
     }
     
+    private Hut[] getHutLijst()
+    {
+        return hutLijst;
+    }
+    
     public void spelerLijstMaken(int aantalSpelers)
     {
         //In deze array worden de spelers hun objecten/namen opgeslagen
-        Speler[] spelerLijst = new Speler[aantalSpelers];
-        this.spelerLijst = spelerLijst;
+        this.spelerLijst = new Speler[aantalSpelers];
     }
     
     public void toonSpelers()
@@ -53,13 +58,13 @@ public class DomeinController
         System.out.println();
     }
     
-    // de verschillende gebieden maken
+    //De verschillende gebieden maken
     public void aanmakenGebieden()
     {   
         //Lijst voor alle gebieden op te slaan, nummer 7 aan te passen adhv kaarten voor hutten
         this.gebiedLijst = new Gebied[8];
-        //Constructors vd gebieden
-        // Gebied(gebiedNaam, max aantal stamleden, functie, gebiedNummer)
+        
+        //Constructors van gebieden: Gebied(gebiedNaam, max aantal stamleden, functie, gebiedNummer)
         Gebied hut = new Gebied("hut",2,"extra stamlid", 1);
         gebiedLijst[0] = hut;
         
@@ -279,7 +284,7 @@ public class DomeinController
     public void aanmakenHutten()
     {
         //Hutlijst wordt aangemaakt, alle hutten zijn null
-        Hut[] hutLijst = new Hut[28];
+        this.hutLijst = new Hut[28];
         
         int hout = 0, leem = 0, steen = 0, goud = 0, getal = 0;
         
@@ -395,7 +400,6 @@ public class DomeinController
 
     private void toonMijnStamleden() 
     {
-        
         
     }
 

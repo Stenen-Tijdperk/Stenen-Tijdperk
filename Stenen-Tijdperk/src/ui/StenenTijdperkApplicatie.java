@@ -1,7 +1,6 @@
 package ui;
 
 import domein.DomeinController;
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -9,7 +8,7 @@ public class StenenTijdperkApplicatie
 {
     public void start() throws InterruptedException
     {
-        
+        //Ojbect van de domeincontroller voor methodes te kunnen oproepen
         DomeinController dom = new DomeinController();
         
         //Object van de scanner aanmaken
@@ -27,8 +26,8 @@ public class StenenTijdperkApplicatie
             } 
             catch (InputMismatchException keuzeAantalSpelers) 
             {
-                invoer.nextLine();
                 System.out.println("Voer een getal in!");
+                invoer.nextLine();
             }
             //Minstens 2 spelers, maximum 4 spelers
         } while (aantalSpelers < 2 || aantalSpelers > 4);
@@ -42,6 +41,7 @@ public class StenenTijdperkApplicatie
         //Hutten worden aangemaakt
         dom.aanmakenHutten();
         
+        //Spelers worden aangemaakt
         dom.aanmakenSpeler(aantalSpelers);
                 
         //Print out dat spel is begonnen
@@ -53,6 +53,7 @@ public class StenenTijdperkApplicatie
         //Geef menu met keuzes
         dom.toonMenuMetKeuze();
         
+        //Witte lijn voor overzicht
         System.out.println();   
     }
 }
