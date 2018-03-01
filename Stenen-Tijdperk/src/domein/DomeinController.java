@@ -26,7 +26,7 @@ public class DomeinController
         return hutLijst;
     }
 
-    public void aanmakenSpelers()
+    private void aanmakenSpelers()
     {
         //Voor het aantal spelers
         int aantal = 0;
@@ -63,7 +63,7 @@ public class DomeinController
         //Witte lijn voor overzicht
         System.out.println();
         
-        //aanmaken van het aantalSpelers
+        //aanmaken van het de spelers
         for (int i = 0; i < aantal; i++) 
         {
             String naamSpeler;
@@ -137,38 +137,41 @@ public class DomeinController
         return oke;
     }
     
-    public void aanmakenGebieden()
+    private void aanmakenGebieden()
     {   
         //Lijst voor alle gebieden op te slaan, nummer 7 aan te passen adhv kaarten voor hutten
-        this.gebiedLijst = new Gebied[8];
+        this.gebiedLijst = new Gebied[9];
         
         //Constructors van gebieden: Gebied(gebiedNaam, max aantal stamleden, functie, gebiedNummer)
-        Gebied hut = new Gebied("hut",2,"extra stamlid", 1);
+        Gebied hut = new Gebied("hut",2,"stamlid + 1", 1);
         gebiedLijst[0] = hut;
         
         Gebied akker = new Gebied("akker",1,"voedselproductie + 1",2);
         gebiedLijst[1] = akker;
         
-        Gebied jacht = new Gebied("jacht",40,"voedsel + x",3);
-        gebiedLijst[2] = jacht;
+        Gebied gereedschapmaker = new Gebied("gereedschapmaker",1,"+ gereedschap + 1",3);
+        gebiedLijst[2] = gereedschapmaker;
         
-        Gebied bos = new Gebied("bos",7,"hout + x",4);
-        gebiedLijst[3] = bos;
+        Gebied jacht = new Gebied("jacht",40,"voedsel + x",4);
+        gebiedLijst[3] = jacht;
         
-        Gebied leemgroeve = new Gebied("leemgroeve",7,"leem + x",5);
-        gebiedLijst[4] = leemgroeve;
+        Gebied bos = new Gebied("bos",7,"hout + x",5);
+        gebiedLijst[4] = bos;
         
-        Gebied steengroeve = new Gebied("steengroeve",7,"steen + x",6);
-        gebiedLijst[5] = steengroeve;
+        Gebied leemgroeve = new Gebied("leemgroeve",7,"leem + x",6);
+        gebiedLijst[5] = leemgroeve;
         
-        Gebied rivier = new Gebied("rivier",7,"goud + x",7);
-        gebiedLijst[6] = rivier;
+        Gebied steengroeve = new Gebied("steengroeve",7,"steen + x",7);
+        gebiedLijst[6] = steengroeve;
         
-        Gebied gereedschapmaker = new Gebied("gereedschapmaker",1,"+ gereedschapfiche",8);
-        gebiedLijst[7] = gereedschapmaker;
+        Gebied rivier = new Gebied("rivier",7,"goud + x",8);
+        gebiedLijst[7] = rivier;
+        
+        Gebied hutKopen = new Gebied("huisjes markt",1,"koop een huisje",9);
+        gebiedLijst[8] = hutKopen;
     }
     
-    public void aanmakenHutten()
+    private void aanmakenHutten()
     {
         //Hutlijst wordt aangemaakt, alle hutten zijn null
         this.hutLijst = new Hut[28];
@@ -199,6 +202,13 @@ public class DomeinController
             //Hut wordt opgeslagen
             hutLijst[aantalHutten] = hut;
         }
+    }
+
+    public void preLoadSpel()
+    {
+        aanmakenHutten();
+        aanmakenGebieden();
+        aanmakenSpelers();
     }
     
     private void toonSpelers()
@@ -300,7 +310,7 @@ public class DomeinController
                         System.out.println("Voer een getal in!");
                         invoer.nextLine();
                         }
-                    }while(gebiedNummer <= 0 || gebiedNummer > 8);
+                    }while(gebiedNummer <= 0 || gebiedNummer > 9);
 
                     do{
                         try
