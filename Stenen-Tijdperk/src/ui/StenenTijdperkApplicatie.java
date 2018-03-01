@@ -207,7 +207,7 @@ public class StenenTijdperkApplicatie
                     invoer.nextLine();
                     System.out.println("Voer een getal in!");
                     }
-                }while(gebiedNummer < 0 || gebiedNummer > 7);
+                }while(gebiedNummer < 0 || gebiedNummer > 8);
                 
                 do{
                     try
@@ -228,7 +228,11 @@ public class StenenTijdperkApplicatie
                 System.out.printf("%nEr %s %d %s geplaatst op %s%n%n",aantal>1?"werden":"werd", aantal, aantal>1?"stamleden":"stamlid", gebiedLijst[gebiedNummer-1].getNaamGebied());
                 
                 plaatsStamleden(gebiedNummer, aantal, gebiedLijst, spelerLijst);
-                beurtOverslaan(spelerLijst);
+                
+                if(aantal != 0)
+                {
+                    beurtOverslaan(spelerLijst);
+                }
                 toonMenuMetKeuze(spelerLijst, gebiedLijst);
             break;
             case 4:

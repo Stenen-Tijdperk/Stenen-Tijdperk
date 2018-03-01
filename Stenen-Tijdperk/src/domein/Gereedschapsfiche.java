@@ -4,9 +4,7 @@ public class Gereedschapsfiche
 {
     private int waarde;
     private boolean reedsGebruiktDezeRonde;
-    
-    // moet hier een constructor komen? Rob
-    
+       
     public Gereedschapsfiche(int waarde, boolean reedsGebruiktDezeRonde)
     {
         setWaarde(waarde);
