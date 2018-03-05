@@ -12,10 +12,16 @@ public class DomeinController
     private Gebied[] gebiedLijst;
     private Hut[] hutLijst;
     private int[][] stamledenLocatieLijst;
+    private Gereedschap[][] gereedschapsLijstVanAlleSpelers;
     
     private void aanmakenLocatieLijst()
     {
          stamledenLocatieLijst =new int[getSpelerLijst().length][9];
+    }
+    
+    private void aanmakenGereedschapsLijstVanAlleSpelers()
+    {
+         gereedschapsLijstVanAlleSpelers =new int[getSpelerLijst().length][3];
     }
     
     private Speler[] getSpelerLijst()
@@ -82,8 +88,8 @@ public class DomeinController
                 //De namen van de spelers controleren
             }while(controleerNaamSpelers(naamSpeler, i) == false);
             
-            //Constructor van de speler: naam, nummer, kleur, aanBeurt, aantalStamleden, aantalHout, aantalLeem, aantalSteen, aantalGoud, aantalVoedsel
-            Speler speler = new Speler(naamSpeler, nummersLijst[i], kleurenLijst[i], false, 5, 0, 0, 0, 0,12);
+            //Constructor van de speler: naam, nummer, kleur
+            Speler speler = new Speler(naamSpeler, nummersLijst[i], kleurenLijst[i]);
             
             //Speler opslaan in de lijst
             spelerLijst[i] = speler;
@@ -217,6 +223,7 @@ public class DomeinController
         aanmakenGebieden();
         aanmakenSpelers();
         aanmakenLocatieLijst();
+        aanmakenGereedschapsLijstVanAlleSpelers();
     }
     
     private void toonSpelers()
@@ -249,7 +256,29 @@ public class DomeinController
             
             System.out.println();
         }
-    }        
+    }
+    
+    private void toonMijnGereedschap()
+    {
+        int spelerIndex= 0; 
+        
+        for (Speler speler : getSpelerLijst()) 
+        {
+            if (speler.getAanBeurt()) 
+            {
+                spelerIndex = speler.getNummer()-1;
+            }  
+        }
+        
+        for(int loper=0;loper<getSpelerLijst()[spelerIndex].getGereedschapskistje().length;loper++)
+        {
+            System.out.printf("Gereedschap: %d | Waarde: %d | Reeds gebruikt deze ronde: %s%n",
+                    spelerLijst[spelerIndex].getGereedschapskistje().getNummer(),
+                    spelerLijst[spelerIndex].getGereedschapskistje().getWaarde(),
+                    spelerLijst[spelerIndex].getGereedschapskistje().getReedsGebruiktDezeRonde()?"ja":"nee"
+                    );
+        }
+    }
     
     public void bepaalRandomSpelerAanBeurt()
     {
@@ -293,7 +322,7 @@ public class DomeinController
                 try
                 {
                     System.out.printf("Geef een nummer voor de actie die u wilt uitvoeren: %n"
-                    + "1: Toon spelers | 2:  Toon gebieden | 3: Plaats stamleden | 4: Beurt overslaan | 5: Toon mijn stamleden%n");
+                    + "1: Toon spelers | 2:  Toon gebieden | 3: Plaats stamleden | 4: Beurt overslaan | 5: Toon mijn stamleden | 6: Toon mijn gereedschap%n");
                     nummer = invoer.nextInt();
                     invoer.nextLine();
                 }
@@ -302,7 +331,7 @@ public class DomeinController
                     invoer.nextLine();
                     System.out.println("Voer een getal in!");
                 }
-            }while(nummer < 1 || nummer > 5);
+            }while(nummer < 1 || nummer > 6);
 
             //Witte lijn voor overzicht
             System.out.println();
@@ -376,6 +405,8 @@ public class DomeinController
                     toonMijnStamleden();
                     toonMenuMetKeuze();
                 break;
+                case 6:
+                    toonMijnGereedschap();
             }
         }
         else

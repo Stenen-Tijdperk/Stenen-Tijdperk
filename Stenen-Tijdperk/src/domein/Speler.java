@@ -14,20 +14,41 @@ public final class Speler {
     private String naam;
     private String kleur;
     private boolean aanBeurt = false;
+    private Gereedschap[] gereedschapskistje;
     
-    public Speler(String naam, int nummer, String kleur, boolean aanBeurt, int aantalStamleden, int aantalHout, int aantalLeem, int aantalSteen, int aantalGoud, int aantalVoedsel)
+    public Speler(String naam, int nummer, String kleur)
     {
         setNaam(naam);
         setNummer(nummer);
         setKleur(kleur);
-        setAanBeurt(aanBeurt);
-        setAantalStamleden(aantalStamleden);
-        setAantalHout(aantalHout);
-        setAantalLeem(aantalLeem);
-        setAantalSteen(aantalSteen);
-        setAantalGoud(aantalGoud);
-        setAantalVoedsel(aantalVoedsel);
+        setAanBeurt(false);
+        setAantalStamleden(5);
+        setAantalHout(0);
+        setAantalLeem(0);
+        setAantalSteen(0);
+        setAantalGoud(0);
+        setAantalVoedsel(12);
+        setGereedschapskistje();
     }
+
+    public Gereedschap[] getGereedschapskistje()
+    {
+        return gereedschapskistje;
+    }
+
+    private void setGereedschapskistje()
+    {
+        gereedschapskistje = new Gereedschap[3];
+        
+        for(int loper=0; loper<gereedschapskistje.length;loper++)
+        {
+            Gereedschap gereedschapje = new Gereedschap(loper+1, 0, false);
+            gereedschapskistje[loper] = gereedschapje;
+        }
+        
+    }
+    
+    
     
     public final void setNummer(int nummer) 
     {
