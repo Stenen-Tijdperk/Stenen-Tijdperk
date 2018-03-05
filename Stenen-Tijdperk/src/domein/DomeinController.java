@@ -269,7 +269,23 @@ public class DomeinController
     public void toonMenuMetKeuze()
     {
         Scanner invoer = new Scanner(System.in);
-        int nummer=0;
+        int nummer=0, spelerNummer=0;
+        
+        for(int tester = 0; tester<getSpelerLijst().length;tester++)
+        {
+            for (Speler spelerLijst1 : getSpelerLijst()) 
+            {
+                if (spelerLijst1.getAanBeurt()) 
+                {
+                    spelerNummer = spelerLijst1.getNummer();
+                }  
+            }
+            if(getSpelerLijst()[spelerNummer-1].getAantalStamleden() == 0)
+            {
+                beurtOverslaan();
+            }
+        }
+        
         
         if(controleerAlleStamledenGeplaatst() == true)
         {
@@ -455,10 +471,22 @@ public class DomeinController
     }
 
     private boolean controleerAlleStamledenGeplaatst() 
-    {
+    { 
+        int spelerNummer = 0; 
         boolean oke = true;
-        for(int loper=0; loper<getSpelerLijst().length;loper++)
+        
+        for (Speler spelerLijst1 : getSpelerLijst()) 
         {
+            if (spelerLijst1.getAanBeurt()) 
+            {
+                spelerNummer = spelerLijst1.getNummer();
+            }  
+        }
+        
+        for(int loper=spelerNummer-1-getSpelerLijst().length ; loper<getSpelerLijst().length;loper++)
+        {
+            if (loper < 0)
+                break;
             if(getSpelerLijst()[loper].getAantalStamleden() == 0)
             {
                 oke = false;
@@ -495,7 +523,13 @@ public class DomeinController
             oke = false;
             System.out.println("Je hebt niet zoveel stamleden.");
         }
-        
+        /*
+        if(aantal < 0)
+        {
+            oke = false;
+            System.out.println("Je kan geen negatief aantal stamleden plaatsen");
+        }
+        */
         //aantal stamleden reeds op plek
         if(getGebiedLijst()[gebiedNummer-1].getAantalMaxLeden() - getGebiedLijst()[gebiedNummer-1].getAantalGenomenPlaatsen() < aantal)
         {           
