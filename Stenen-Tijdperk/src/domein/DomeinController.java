@@ -1,5 +1,6 @@
 package domein;
 
+import java.io.PrintStream;
 import java.security.SecureRandom;
 import java.util.InputMismatchException;
 import java.util.Objects;
@@ -10,6 +11,12 @@ public class DomeinController
     private Speler[] spelerLijst;
     private Gebied[] gebiedLijst;
     private Hut[] hutLijst;
+    private int[][] stamledenLocatieLijst;
+    
+    private void aanmakenLocatieLijst()
+    {
+         stamledenLocatieLijst =new int[getSpelerLijst().length][9];
+    }
     
     private Speler[] getSpelerLijst()
     {
@@ -209,6 +216,7 @@ public class DomeinController
         aanmakenHutten();
         aanmakenGebieden();
         aanmakenSpelers();
+        aanmakenLocatieLijst();
     }
     
     private void toonSpelers()
@@ -391,11 +399,11 @@ public class DomeinController
     {   
         int spelerNummer = 0; 
         boolean oke = true; 
-        for (Speler spelerLijst1 : getSpelerLijst()) 
+        for (Speler speler : getSpelerLijst()) 
         {
-            if (spelerLijst1.getAanBeurt()) 
+            if (speler.getAanBeurt()) 
             {
-                spelerNummer = spelerLijst1.getNummer();
+                spelerNummer = speler.getNummer();
             }  
         }
         try{
@@ -406,11 +414,44 @@ public class DomeinController
         {
             System.out.println("Geef een geldig aantal!");
         }
+        
+        stamledenLocatieLijst[spelerNummer-1][gebiedNummer-1] = aantalStamleden;
+        
     }
 
     private void toonMijnStamleden() 
     {
-        System.out.println("Functie nog invoeren.");
+        int spelerNummer = 0; 
+        String spelerNaam = ""; 
+        
+         for (Speler speler : getSpelerLijst()) 
+        {
+            if (speler.getAanBeurt()) 
+            {
+                spelerNummer = speler.getNummer();
+            }  
+        }
+         
+         for (Speler speler : getSpelerLijst()) 
+        {
+            if (speler.getAanBeurt()) 
+            {
+                spelerNaam = speler.getNaam();
+            }  
+        }
+        
+         try{
+             for (int loper = 0; loper < stamledenLocatieLijst[spelerNummer-1].length; loper++) 
+         {
+            System.out.printf("Speler %s heeft %d stamleden op %s%n",spelerNaam, stamledenLocatieLijst[spelerNummer-1][loper], getGebiedLijst()[loper].getNaamGebied());
+         }
+             System.out.println("");
+        }
+        catch(ArrayIndexOutOfBoundsException tonen)
+        {
+            System.out.println("Geef een geldig aantal!");
+        }
+        
     }
 
     private boolean controleerAlleStamledenGeplaatst() 
