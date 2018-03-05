@@ -12,16 +12,10 @@ public class DomeinController
     private Gebied[] gebiedLijst;
     private Hut[] hutLijst;
     private int[][] stamledenLocatieLijst;
-    private Gereedschap[][] gereedschapsLijstVanAlleSpelers;
     
     private void aanmakenLocatieLijst()
     {
          stamledenLocatieLijst =new int[getSpelerLijst().length][9];
-    }
-    
-    private void aanmakenGereedschapsLijstVanAlleSpelers()
-    {
-         gereedschapsLijstVanAlleSpelers =new int[getSpelerLijst().length][3];
     }
     
     private Speler[] getSpelerLijst()
@@ -223,7 +217,6 @@ public class DomeinController
         aanmakenGebieden();
         aanmakenSpelers();
         aanmakenLocatieLijst();
-        aanmakenGereedschapsLijstVanAlleSpelers();
     }
     
     private void toonSpelers()
@@ -272,10 +265,10 @@ public class DomeinController
         
         for(int loper=0;loper<getSpelerLijst()[spelerIndex].getGereedschapskistje().length;loper++)
         {
-            System.out.printf("Gereedschap: %d | Waarde: %d | Reeds gebruikt deze ronde: %s%n",
-                    spelerLijst[spelerIndex].getGereedschapskistje().getNummer(),
-                    spelerLijst[spelerIndex].getGereedschapskistje().getWaarde(),
-                    spelerLijst[spelerIndex].getGereedschapskistje().getReedsGebruiktDezeRonde()?"ja":"nee"
+            System.out.printf("Gereedschap %d | Waarde: %d | Reeds gebruikt deze ronde: %s%n",
+                    spelerLijst[spelerIndex].getGereedschapskistje()[loper].getNummer(),
+                    spelerLijst[spelerIndex].getGereedschapskistje()[loper].getWaarde(),
+                    spelerLijst[spelerIndex].getGereedschapskistje()[loper].getReedsGebruiktDezeRonde()?"ja":"nee"
                     );
         }
     }
@@ -407,6 +400,8 @@ public class DomeinController
                 break;
                 case 6:
                     toonMijnGereedschap();
+                    toonMenuMetKeuze();
+                 break;
             }
         }
         else
