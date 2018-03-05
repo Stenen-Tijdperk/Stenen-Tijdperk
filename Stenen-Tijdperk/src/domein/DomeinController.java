@@ -498,6 +498,27 @@ public class DomeinController
 
     private boolean controleerAlleStamledenGeplaatst() 
     { 
+        boolean oke = true;
+        
+        for(int loper=0;loper<getSpelerLijst().length;loper++)
+        {
+            if (getSpelerLijst()[loper].getAantalStamleden() == 0)
+            {
+                oke = false;
+            }
+            else
+            {
+                oke = true;
+            }
+        }
+        
+        return oke;
+        
+        
+        
+        
+        
+        /*
         int spelerNummer = 0; 
         boolean oke = true;
         
@@ -512,17 +533,22 @@ public class DomeinController
         for(int loper=spelerNummer-1-getSpelerLijst().length ; loper<getSpelerLijst().length;loper++)
         {
             if (loper < 0)
-                break;
+            {   
+                continue;
+            }
             if(getSpelerLijst()[loper].getAantalStamleden() == 0)
-            {
-                oke = false;
-            }
-            else
-            {
-                oke = true;
-            }
+                    {
+                        oke = false;
+                        System.out.println();
+                    }
+                else
+                    {
+                        oke = true;
+                    }
+            
         }
         return oke;
+        */
     }
 
     private boolean controleerStamleden(int aantal, int gebiedNummer)
@@ -541,26 +567,44 @@ public class DomeinController
         if (gebiedNummer == 1 && aantal !=2)
         {
             oke = false;
-            System.out.println("Op de hut moet je 2 stamleden zetten.");
+            System.out.println("Op de hut moet je twee stamleden zetten.");
         }
         
-        if(aantal > getSpelerLijst()[spelerNummer-1].getAantalStamleden() || aantal < 0)
+        if(aantal > getSpelerLijst()[spelerNummer-1].getAantalStamleden())
         {
             oke = false;
             System.out.println("Je hebt niet zoveel stamleden.");
         }
-        /*
+        
         if(aantal < 0)
         {
             oke = false;
             System.out.println("Je kan geen negatief aantal stamleden plaatsen");
         }
-        */
+        
         //aantal stamleden reeds op plek
         if(getGebiedLijst()[gebiedNummer-1].getAantalMaxLeden() - getGebiedLijst()[gebiedNummer-1].getAantalGenomenPlaatsen() < aantal)
         {           
             oke = false;
             System.out.println("Je gaf een te hoog aantal stamleden in voor dit gebied.");
+        }
+        
+        //reeds geplaatsts op dat gebied
+        if (stamledenLocatieLijst[spelerNummer-1][gebiedNummer-1] != 0)
+        {
+            oke = false;
+            System.out.println("Je hebt in een vorige ronde al op dat gebied stamleden geplaatsts.");
+            System.out.println();
+            toonMenuMetKeuze();
+        }
+        
+        //gebied hut, maar slechts 1 ventje over
+        if (gebiedNummer == 1 && getSpelerLijst()[spelerNummer-1].getAantalStamleden() == 1)
+        {
+            oke = false;
+            System.out.println("Je hebt minder als twee stamleden.");
+            System.out.println();
+            toonMenuMetKeuze();
         }
         return oke;
     }
