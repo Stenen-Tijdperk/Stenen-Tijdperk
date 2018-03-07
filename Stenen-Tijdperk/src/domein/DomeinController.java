@@ -1,6 +1,5 @@
 package domein;
 
-import java.io.PrintStream;
 import java.security.SecureRandom;
 import java.util.InputMismatchException;
 import java.util.Objects;
@@ -28,6 +27,11 @@ public class DomeinController
     {
         return hutLijst;
     }
+    
+    private int[][] getStamledenLocatieLijst()
+    {
+        return stamledenLocatieLijst;
+    }
 
     private void aanmakenSpelers()
     {
@@ -51,7 +55,7 @@ public class DomeinController
                 System.out.println("Voer een getal in.");
                 invoer.nextLine();
             }
-            //Minstens 2 spelers, maximum 4 spelers
+          //Minstens 2 spelers, maximum 4 spelers
         } while (aantal < 2 || aantal > 4);
         
         //In deze array worden de spelers hun objecten/namen opgeslagen
@@ -66,23 +70,23 @@ public class DomeinController
         //Witte lijn voor overzicht
         System.out.println();
         
-        //aanmaken van het de spelers
-        for (int i = 0; i < aantal; i++) 
+        //Aanmaken van het de spelers
+        for (int spelerLoper = 0; spelerLoper < aantal; spelerLoper++) 
         {
             String naamSpeler;
             
             //Kies spelernaam
             do{
-                System.out.printf("Geef naam van speler %d: ", i+1);
+                System.out.printf("Geef naam van speler %d: ", spelerLoper+1);
                 naamSpeler = invoer.next();
                 //De namen van de spelers controleren
-            }while(controleerNaamSpelers(naamSpeler, i) == false);
+            }while(controleerNaamSpelers(naamSpeler, spelerLoper) == false);
             
             //Constructor van de speler: naam, nummer, kleur
-            Speler speler = new Speler(naamSpeler, nummersLijst[i], kleurenLijst[i]);
+            Speler speler = new Speler(naamSpeler, nummersLijst[spelerLoper], kleurenLijst[spelerLoper]);
             
             //Speler opslaan in de lijst
-            spelerLijst[i] = speler;
+            spelerLijst[spelerLoper] = speler;
             
             //Mooie lijn tussen elke speler
             System.out.println();
@@ -92,7 +96,7 @@ public class DomeinController
         System.out.printf("Het spel is begonnen met %d spelers.%n", aantal);
     }
     
-    private boolean controleerNaamSpelers(String naamSpeler, int spelerNummer)
+    private boolean controleerNaamSpelers(String naamSpeler, int spelerIndex)
     {
         boolean oke = true;
         //Naam mag niet langer als 10 characters zijn
@@ -103,46 +107,42 @@ public class DomeinController
         }
         
         //Naam mag niet 2 keer dezelfde zijn.
-        for (Speler loper : getSpelerLijst()) {
-            switch(spelerNummer)
-            {
-                case 0: 
-                    break;
-                case 1:
-                    if(Objects.equals(naamSpeler.toLowerCase(), getSpelerLijst()[spelerNummer-1].getNaam().toLowerCase()))
-                    {
-                        oke = false;
-                    }
-                    break;
-                case 2:
-                    if(Objects.equals(naamSpeler.toLowerCase(), getSpelerLijst()[spelerNummer-2].getNaam().toLowerCase()) 
-                            || Objects.equals(naamSpeler.toLowerCase(), getSpelerLijst()[spelerNummer-1].getNaam().toLowerCase()))
-                    {
-                        oke = false;
-                    } 
-                    break;
-                case 3:
-                    if(Objects.equals(naamSpeler.toLowerCase(), spelerLijst[spelerNummer-3].getNaam().toLowerCase()) 
-                            || Objects.equals(naamSpeler.toLowerCase(), spelerLijst[spelerNummer-2].getNaam().toLowerCase()) 
-                            || Objects.equals(naamSpeler.toLowerCase(), spelerLijst[spelerNummer-1].getNaam().toLowerCase()))
-                    {
-                        oke = false;
-                    } 
-                    break;
+        switch(spelerIndex)
+        {
+            case 0: 
+                break;
+            case 1:
+                if(Objects.equals(naamSpeler.toLowerCase(), getSpelerLijst()[spelerIndex-1].getNaam().toLowerCase()))
+                {
+                    oke = false;
+                }
+                break;
+            case 2:
+                if(Objects.equals(naamSpeler.toLowerCase(), getSpelerLijst()[spelerIndex-2].getNaam().toLowerCase()) 
+                    || Objects.equals(naamSpeler.toLowerCase(), getSpelerLijst()[spelerIndex-1].getNaam().toLowerCase()))
+                {
+                    oke = false;
+                } 
+                break;
+            case 3:
+                if(Objects.equals(naamSpeler.toLowerCase(), spelerLijst[spelerIndex-3].getNaam().toLowerCase()) 
+                    || Objects.equals(naamSpeler.toLowerCase(), spelerLijst[spelerIndex-2].getNaam().toLowerCase()) 
+                    || Objects.equals(naamSpeler.toLowerCase(), spelerLijst[spelerIndex-1].getNaam().toLowerCase()))
+                {
+                    oke = false;
+                } 
+                break;
             }
-                    if (oke == false)
-                    {
-                        System.out.println("De naam is al genomen.");
-                        break;
-                    }
-        }
-
+            if (oke == false)
+            {
+                System.out.println("De naam is al genomen.");
+            }
         return oke;
     }
     
     private void aanmakenGebieden()
     {   
-        //Lijst voor alle gebieden op te slaan, nummer 7 aan te passen adhv kaarten voor hutten
+        //Lijst voor alle gebieden op te slaan
         this.gebiedLijst = new Gebied[9];
         
         //Constructors van gebieden: Gebied(gebiedNaam, max aantal stamleden, functie, gebiedNummer)
@@ -223,10 +223,10 @@ public class DomeinController
     private void toonSpelers()
     {
         //Spelers eens afprinten
-        for (Speler loper : getSpelerLijst()) 
+        for (Speler speler : getSpelerLijst()) 
         {
             //toString van klasse Speler oproepen
-            System.out.print(loper.toString());
+            System.out.print(speler.toString());
             
             System.out.println();
         }
@@ -234,44 +234,35 @@ public class DomeinController
     
     private void toonGebieden()
     {
-        for (int loper=0;getGebiedLijst().length>loper;loper++)
-        {
-            System.out.print(getGebiedLijst()[loper].toString());
-            
+        for (Gebied gebied : getGebiedLijst()) {
+            System.out.print(gebied.toString());
             System.out.println();
         }
     }
     
     private void toonHutten()
     {
-        for (int loper=0;getHutLijst().length>loper;loper++)
-        {
-            System.out.print(getHutLijst()[loper].toString());
-            
+        for (Hut hut : getHutLijst()) {
+            System.out.print(hut.toString());
             System.out.println();
         }
     }
     
     private void toonMijnGereedschap()
     {
-        int spelerIndex= 0; 
+        int spelerIndex= spelerNummerOphalen()-1,
+                lengteVanGereedschapskistje = getSpelerLijst()[spelerIndex].getGereedschapskistje().length;
         
-        for (Speler speler : getSpelerLijst()) 
-        {
-            if (speler.getAanBeurt()) 
-            {
-                spelerIndex = speler.getNummer()-1;
-            }  
-        }
-        
-        for(int loper=0;loper<getSpelerLijst()[spelerIndex].getGereedschapskistje().length;loper++)
+        for(int gereedschap=0;gereedschap<lengteVanGereedschapskistje;gereedschap++)
         {
             System.out.printf("Gereedschap %d | Waarde: %d | Reeds gebruikt deze ronde: %s%n",
-                    spelerLijst[spelerIndex].getGereedschapskistje()[loper].getNummer(),
-                    spelerLijst[spelerIndex].getGereedschapskistje()[loper].getWaarde(),
-                    spelerLijst[spelerIndex].getGereedschapskistje()[loper].getReedsGebruiktDezeRonde()?"ja":"nee"
+                    spelerLijst[spelerIndex].getGereedschapskistje()[gereedschap].getNummer(),
+                    spelerLijst[spelerIndex].getGereedschapskistje()[gereedschap].getWaarde(),
+                    spelerLijst[spelerIndex].getGereedschapskistje()[gereedschap].getReedsGebruiktDezeRonde()?"ja":"nee"
                     );
         }
+        //Witte lijn voor overzicht
+        System.out.println();
     }
     
     public void bepaalRandomSpelerAanBeurt()
@@ -288,42 +279,53 @@ public class DomeinController
         //Mooie lijn voor overzicht
         System.out.println();
     }
-    
 
-    public void toonMenuMetKeuze()
+    public void deelRonde1Spelen()
+    {  
+            toonMenuMetKeuze();
+    }
+
+    private void overgangVolgendeDeelronde()
     {
-        Scanner invoer = new Scanner(System.in);
-        int nummer=0, spelerNummer=0, gebiedNummer = 0, aantal = 0, spelerIndex = 0;
-        
-        //Spelernummer ophalen
-        for (Speler speler : getSpelerLijst()) 
-        {
-            if (speler.getAanBeurt()) 
-            {
-                spelerNummer = speler.getNummer();
-                spelerIndex = spelerNummer - 1;
-            }  
-        }
-        
-        //Beurt overslaan indien een speler geen stamleden meer heeft
-        for (Speler speler : getSpelerLijst()) {
-            if(getSpelerLijst()[spelerIndex].getAantalStamleden() == 0)
-            {
-                beurtOverslaan();
-            }
-        }
-        
-        //Controleer of het spel gedaan is
-        if(controleerAlleStamledenGeplaatst())
-        {
+            int spelerIndex = spelerNummerOphalen()-1, spelerNummer = spelerNummerOphalen();
+            
             System.out.println("De deelronde voor het plaatsen van de stamleden is afgelopen.");
             //Speluitslag afprinten na deelronde van het paatsen
             toonSpelers();
             System.out.println();
             toonGebieden();
-        }
-        else
-        {
+            
+            //Volgende speler krijgt de beurt
+             getSpelerLijst()[spelerIndex].setAanBeurt(false); 
+        
+            if (spelerNummer == getSpelerLijst().length)
+            {
+                spelerNummer = 1;
+                spelerIndex = 0;
+            }
+            else
+            {
+                spelerNummer++;
+                spelerIndex++;
+            }
+        
+            //Beurt van volgende speler op true zetten
+            getSpelerLijst()[spelerNummer-1].setAanBeurt(true);
+            
+            //Overgaan naar volgende deelronde
+            deelRonde2Spelen();
+    }
+    
+    private void deelRonde2Spelen()
+    {  
+        //Hierin komt grootste deel van Iteratie 2
+    }
+    
+    public void toonMenuMetKeuze()
+    {
+        Scanner invoer = new Scanner(System.in);
+        int nummer = 0, gebiedNummer = 0, aantal = 0;
+        
         do{
             try
             {
@@ -347,12 +349,12 @@ public class DomeinController
             case 1:
                 toonSpelers();
                 System.out.println();
-                toonMenuMetKeuze();
+                deelRonde1Spelen();
             break;
             case 2:
                 toonGebieden();
                 System.out.println();
-                toonMenuMetKeuze();
+                deelRonde1Spelen();
             break;
             case 3:
                 toonGebieden();
@@ -385,79 +387,93 @@ public class DomeinController
                     invoer.nextLine();
                     }
                 }while(controleerStamleden(aantal, gebiedNummer) == false);
-
-                // zoveel stamleden op die plek plaatsen
-                if(aantal > 0)
-                {
-                    System.out.printf("%nEr %s %d %s geplaatst op het gebied: %s.%n%n",aantal>1?"werden":"werd", aantal, aantal>1?"stamleden":"stamlid", gebiedLijst[gebiedNummer-1].getNaamGebied());
-                }
-                else
+                
+                if(aantal <= 0)
                 {
                     System.out.printf("Je hebt geen stamleden geplaats, je blijft aan de beurt.%n");
+                    toonMenuMetKeuze();
                 }
 
                 plaatsStamleden(gebiedNummer, aantal);
-
+                
                 if(aantal != 0)
                 {
                     beurtOverslaan();
                 }
-
-                toonMenuMetKeuze();
+                
+                if(controleerAlleStamledenGeplaatst())
+                {
+                    overgangVolgendeDeelronde();
+                }
+                
             break;
             case 4:
                 beurtOverslaan();
-                toonMenuMetKeuze();
+                deelRonde1Spelen();
             break;
             case 5:
                 toonMijnStamleden();
-                toonMenuMetKeuze();
+                deelRonde1Spelen();
             break;
             case 6:
                 toonMijnGereedschap();
-                toonMenuMetKeuze();
+                deelRonde1Spelen();
              break;
-        } 
         }
     }
 
     private void beurtOverslaan()
     {
-        int nummer=1;
+        int spelerIndex=spelerNummerOphalen()-1, spelerNummer = spelerNummerOphalen();
         
-        for (Speler spelerLijst1 : getSpelerLijst()) 
-        {
-            if (spelerLijst1.getAanBeurt()) 
-            {
-                nummer = spelerLijst1.getNummer();
-                spelerLijst1.setAanBeurt(false);
-            }  
-        }
+        //Beurt van speler aan beurt veranderen
+        getSpelerLijst()[spelerIndex].setAanBeurt(false); 
         
-        if (nummer == getSpelerLijst().length)
+        //Indien laatste speler aan de beurt is, krijgt eerste speler de beurt
+        //Zo niet dan krijgt de volgende speler de beurt
+        if (spelerNummer == getSpelerLijst().length)
         {
-            nummer = 1;
+            spelerNummer = 1;
+            spelerIndex = 0;
         }
         else
         {
-            nummer += 1;
+            spelerNummer++;
+            spelerIndex++;
         }
-        getSpelerLijst()[nummer-1].setAanBeurt(true);
+        
+        //Beurt van volgende speler op true zetten
+        getSpelerLijst()[spelerNummer-1].setAanBeurt(true);
+        
+        //Controleren of het spel gedaan is
+        if(controleerAlleStamledenGeplaatst())
+        {
+            overgangVolgendeDeelronde();
+        }
+        else
+        {
+            //Volgende speler heeft geen stamleden? Beurt overslaan
+            if (getSpelerLijst()[spelerIndex].getAantalStamleden() == 0)
+            {
+                beurtOverslaan();
+            }
+                deelRonde1Spelen();
+        }
     }
     
     private void plaatsStamleden(int gebiedNummer, int aantalStamleden)
     {   
-        int spelerIndex = 0; 
-        boolean oke = true; 
-        
-        //SpelerIndex ophalen van de speler aan beurt
-        for (Speler speler : getSpelerLijst()) 
+        if(aantalStamleden > 0)
         {
-            if (speler.getAanBeurt()) 
-            {
-                spelerIndex = speler.getNummer() - 1;
-            }  
+            System.out.printf("%nEr %s %d %s geplaatst op het gebied: %s.%n%n",
+                    aantalStamleden>1?"werden":"werd",
+                    aantalStamleden,
+                    aantalStamleden>1?"stamleden":"stamlid",
+                    gebiedLijst[gebiedNummer-1].getNaamGebied());
         }
+        
+        int spelerIndex = spelerNummerOphalen()-1; 
+        boolean oke = true;
         
         try{
             //Het aantal genomen plaatsen wordt aangepast
@@ -477,35 +493,26 @@ public class DomeinController
 
     private void toonMijnStamleden() 
     {
-        int spelerIndex = 0; 
-        String spelerNaam = ""; 
-        
-        //Spelernaam en -index ophalen van de speler aan beurt
-        for (Speler speler : getSpelerLijst()) 
-        {
-            if (speler.getAanBeurt()) 
-            {
-                spelerIndex = speler.getNummer() - 1;
-                spelerNaam = speler.getNaam();
-            }  
-        }
+        int spelerIndex = spelerNummerOphalen()-1; 
+        String spelerNaam = "";
         
         try
         {
-            for (int loper = 0; loper < stamledenLocatieLijst[spelerIndex].length; loper++) 
+            for (int loper = 0; loper < getStamledenLocatieLijst()[spelerIndex].length; loper++) 
                 {
                 System.out.printf("Speler %s heeft %d %s op %s.%n",
-                        spelerNaam, stamledenLocatieLijst[spelerIndex][loper],
-                        stamledenLocatieLijst[spelerIndex][loper]==1?"stamlid":"stamleden",
+                        getSpelerLijst()[spelerIndex].getNaam(), getStamledenLocatieLijst()[spelerIndex][loper],
+                        getStamledenLocatieLijst()[spelerIndex][loper]==1?"stamlid":"stamleden",
                         getGebiedLijst()[loper].getNaamGebied());
                 }
-            //Witte lijn voor overzicht
-             System.out.println("");
         }
         catch(ArrayIndexOutOfBoundsException tonen)
         {
             System.out.println("Geef een geldig aantal.");
         }
+        
+        //Witte lijn voor overzicht
+         System.out.println("");
         
     }
 
@@ -513,96 +520,40 @@ public class DomeinController
     { 
         //True betekent dat het spel stopt omdat er geen stamleden meer zijn
         boolean stop = false;
-        int aantalSpelers = getSpelerLijst().length, spelerIndex = 0;
+        int aantalSpelers = getSpelerLijst().length;
         
-        
-        //Spelerindex ophalen
-        for (Speler spelerLijst1 : getSpelerLijst()) 
-        {
-            if (spelerLijst1.getAanBeurt()) 
-            {
-                spelerIndex = spelerLijst1.getNummer() - 1;
-            }  
-        }
             switch(aantalSpelers)
             {
                 case 2:
-                if (getSpelerLijst()[spelerIndex].getAantalStamleden() == 0
-                       && getSpelerLijst()[spelerIndex-1].getAantalStamleden() == 0
-                        && getSpelerLijst()[spelerIndex-2].getAantalStamleden() == 0)
+                if (getSpelerLijst()[aantalSpelers-1].getAantalStamleden() == 0
+                       && getSpelerLijst()[aantalSpelers-2].getAantalStamleden() == 0)
                 {
                     stop = true;
                 }
                     break;
                 case 3:
-                if (getSpelerLijst()[spelerIndex].getAantalStamleden() == 0
-                       && getSpelerLijst()[spelerIndex-1].getAantalStamleden() == 0
-                        && getSpelerLijst()[spelerIndex-2].getAantalStamleden() == 0)
+                if (getSpelerLijst()[aantalSpelers-1].getAantalStamleden() == 0
+                       && getSpelerLijst()[aantalSpelers-2].getAantalStamleden() == 0
+                       && getSpelerLijst()[aantalSpelers-3].getAantalStamleden() == 0)
                 {
                     stop = true;
                 }
                     break;
                 case 4:
-                if (getSpelerLijst()[spelerIndex].getAantalStamleden() == 0
-                       && getSpelerLijst()[spelerIndex-1].getAantalStamleden() == 0
-                        && getSpelerLijst()[spelerIndex-2].getAantalStamleden() == 0
-                        && getSpelerLijst()[spelerIndex-3].getAantalStamleden() == 0)
+                if (getSpelerLijst()[aantalSpelers-1].getAantalStamleden() == 0
+                       && getSpelerLijst()[aantalSpelers-2].getAantalStamleden() == 0
+                       && getSpelerLijst()[aantalSpelers-3].getAantalStamleden() == 0
+                       && getSpelerLijst()[aantalSpelers-4].getAantalStamleden() == 0)
                     break;
-                    
             }
         
         return stop;
-        
-        
-        
-        
-        
-        /*
-        int spelerNummer = 0; 
-        boolean oke = true;
-        
-        for (Speler spelerLijst1 : getSpelerLijst()) 
-        {
-            if (spelerLijst1.getAanBeurt()) 
-            {
-                spelerNummer = spelerLijst1.getNummer();
-            }  
-        }
-        
-        for(int loper=spelerNummer-1-getSpelerLijst().length ; loper<getSpelerLijst().length;loper++)
-        {
-            if (loper < 0)
-            {   
-                continue;
-            }
-            if(getSpelerLijst()[loper].getAantalStamleden() == 0)
-                    {
-                        oke = false;
-                        System.out.println();
-                    }
-                else
-                    {
-                        oke = true;
-                    }
-            
-        }
-        return oke;
-        */
     }
 
     private boolean controleerStamleden(int aantal, int gebiedNummer)
     {
-        int spelerIndex = 0, gebiedIndex = gebiedNummer -1; 
+        int spelerIndex = spelerNummerOphalen()-1, gebiedIndex = gebiedNummer -1; 
         boolean oke = true; 
-        
-        //Spelerindex ophalen
-        for (Speler spelerLijst1 : getSpelerLijst()) 
-        {
-            if (spelerLijst1.getAanBeurt()) 
-            {
-                spelerIndex = spelerLijst1.getNummer() - 1;
-            }  
-        }
         
         //Op de hut moet je twee stamleden zetten, niet meer, niet minder
         if (gebiedNummer == 1 && aantal !=2)
@@ -612,13 +563,13 @@ public class DomeinController
         }
         
         //Je mag niet meer stamleden plaatsen dan je hebt
-        if(aantal > getSpelerLijst()[spelerIndex].getAantalStamleden())
+        if(getSpelerLijst()[spelerIndex].getAantalStamleden() < aantal)
         {
             oke = false;
             System.out.println("Je hebt niet zoveel stamleden.");
         }
         
-        //Je kan niet onder nul gaan.
+        //Je kan niet onder nul gaan
         if(aantal < 0)
         {
             oke = false;
@@ -649,5 +600,21 @@ public class DomeinController
             toonMenuMetKeuze();
         }
         return oke;
+    }
+    
+    private int spelerNummerOphalen()
+    {
+        int spelerNummer=0;
+        
+        //Spelernummer ophalen
+        for (Speler speler : getSpelerLijst()) 
+        {
+            if (speler.getAanBeurt()) 
+            {
+                spelerNummer = speler.getNummer();
+            }  
+        }  
+        
+        return spelerNummer;
     }
 }
