@@ -357,7 +357,9 @@ public class DomeinController
     
     private void deelRonde2Spelen()
     {  
+        Scanner invoer = new Scanner(System.in);
         int meestePunten = 0, minstePunten=100;
+        String antwoord;
         //Elke 2e deelronde wordt de speler met de meeste en met de minste punten bijgehouden
         //NOG TE DOEN: HOE RANG BIJHOUDEN VAN 2 MIDDELSTE SPELERS
         for (Speler speler : getSpelerLijst())
@@ -398,6 +400,47 @@ public class DomeinController
             }
             else
             {
+                //De spelers krijgen hun voedsel per voedselproductie
+                System.out.println("Elke speler krijgt voedsel volgens zijn/haar voedselproductie.");
+                for (Speler speler : getSpelerLijst())
+                {
+                    speler.setAantalVoedsel(speler.getAantalVoedsel()+speler.getVoedselProductie());
+                }
+                //De spelers moeten hun stamleden voeden
+                for (Speler speler : getSpelerLijst())
+                {
+                    try
+                    {
+                        speler.setAantalVoedsel(speler.getAantalVoedsel()-speler.getAantalStamleden());
+                    }
+                    catch (IllegalArgumentException teWeinigVoedselVoorStamleden)
+                    {
+                        System.out.printf("Speler %s heeft te weinig voedsel.%n"
+                                + "Betaal met grondstoffen of ontvang strafpunten.%n", speler.getNaam());
+                        //KIJKEN OF SPELER NOG GRONDSTOFFEN HEEFT PER ONTBREKEND VOEDSEL, ZONIET DAN STRAFPUNTEN
+                        if (kijkOfSpelerGrondstoffenHeeft(speler.getNummer()))
+                        {
+                            do{
+                            System.out.println("Wilt u betalen met grondstoffen?");
+                            antwoord = invoer.nextLine();
+                            }while((!antwoord.toLowerCase().equals("ja")) && (!antwoord.toLowerCase().equals("nee")));
+                            if(antwoord.toLowerCase().equals("ja"))
+                            {
+                                betaalTekortVoedselMetGrondstoffen(speler.getNummer());
+                            }
+                            else
+                            {
+                                System.out.printf("Speler %s had te weinig voedsel, wou zijn grondstoffen niet opofferen en heeft nu %10 strafpunten ontvangen.", speler.getNaam());
+                                speler.setPunten(speler.getPunten()-10);
+                            }
+                        }
+                        else
+                        {
+                            System.out.printf("Speler %s had te weinig voedsel en heeft nu %10 strafpunten ontvangen.", speler.getNaam());
+                            speler.setPunten(speler.getPunten()-10);
+                        }
+                    }
+                }
                 //Het gereedschap zijn reedsGebruikt wordt weer op false gezet
                 gereedschapResetten();
                 //Men speelt weer de eerste deelronde
@@ -408,6 +451,80 @@ public class DomeinController
         {
             toonMenu2MetKeuze();
         }
+    }
+    
+    private boolean kijkOfSpelerGrondstoffenHeeft(int spelerIndex)
+    {
+        //Als het true is dan is het goed
+        boolean heeftGrondstoffen = false;
+        //Optelling van alle grondstoffen dat de speler heeft
+        int aantalGrondstoffenTerBeschikking =
+                getSpelerLijst()[spelerIndex].getAantalHout() + getSpelerLijst()[spelerIndex].getAantalLeem()
+                + getSpelerLijst()[spelerIndex].getAantalSteen() + getSpelerLijst()[spelerIndex].getAantalGoud(),
+                tekortVoedselGetal = getSpelerLijst()[spelerIndex].getAantalVoedsel() - getSpelerLijst()[spelerIndex].getAantalStamleden();
+        //Gecontroleerd of dit hoger is dan het voedsel tekort
+        if(aantalGrondstoffenTerBeschikking > tekortVoedselGetal)
+        {
+            heeftGrondstoffen = true;
+        }
+        return heeftGrondstoffen;
+    }
+    
+    //METHODE GOED NAKIJKEN
+    private void betaalTekortVoedselMetGrondstoffen(int spelerIndex)
+    {
+        //Gegevens van de speler worden opgehaald
+        int aantalHout = getSpelerLijst()[spelerIndex].getAantalHout(),
+            aantalLeem = getSpelerLijst()[spelerIndex].getAantalLeem(),
+            aantalSteen = getSpelerLijst()[spelerIndex].getAantalSteen(),
+            aantalGoud = getSpelerLijst()[spelerIndex].getAantalGoud(),
+            aantalVoedsel = getSpelerLijst()[spelerIndex].getAantalVoedsel(),
+            tekortVoedselGetal;
+        //Het te kort aan voedsel wordt berekend, is een negatief getal
+        tekortVoedselGetal = getSpelerLijst()[spelerIndex].getAantalVoedsel() - getSpelerLijst()[spelerIndex].getAantalStamleden();
+        //Het voedsel dat er wel is wordt al weggenomen voor de stamleden
+        getSpelerLijst()[spelerIndex].setAantalVoedsel(0);
+        //Het tekort aan voedsel wordt steeds betaald met de goedkoopste grondstof
+        if (tekortVoedselGetal < 0)
+        {
+            //Het tekort aan voedsel wordt al gecompenseerd aan hout
+            tekortVoedselGetal = tekortVoedselGetal - aantalHout;
+            //Als er teveel aan hout is betaald dan wordt dat teruggegeven
+            if (tekortVoedselGetal > 0)
+            {
+                getSpelerLijst()[spelerIndex].setAantalHout(tekortVoedselGetal);
+                if (tekortVoedselGetal < 0)
+                {
+                    //Het tekort aan voedsel wordt al gecompenseerd aan hout en leem
+                    tekortVoedselGetal = tekortVoedselGetal - aantalLeem;
+                    //Als er teveel aan leem betaald is dan wordt dat teruggegeven
+                    if (tekortVoedselGetal > 0)
+                    {
+                        getSpelerLijst()[spelerIndex].setAantalLeem(tekortVoedselGetal);
+                        if (tekortVoedselGetal < 0)
+                        {
+                            //Het tekort aan voedsel wordt al gecompenseerd aan hout, leem en steen
+                            tekortVoedselGetal = tekortVoedselGetal - aantalSteen;
+                            //Als er teveel aan steen betaald is dan wordt dat teruggegeven
+                            if (tekortVoedselGetal > 0)
+                            {
+                                getSpelerLijst()[spelerIndex].setAantalSteen(tekortVoedselGetal);
+                                if (tekortVoedselGetal < 0)
+                                {
+                                    //Het tekort aan voedsel wordt al gecompenseerd aan hout, leem, steen en goud
+                                    tekortVoedselGetal = tekortVoedselGetal - aantalGoud;
+                                    //Als er teveel aan goud betaald is dan wordt dat teruggegeven
+                                    if (tekortVoedselGetal > 0)
+                                    {
+                                        getSpelerLijst()[spelerIndex].setAantalGoud(tekortVoedselGetal);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }                      
     }
     
     private boolean spelGedaan()
@@ -832,7 +949,7 @@ public class DomeinController
     {
         Scanner invoer = new Scanner(System.in);
         String antwoord;
-        int dobbelResultaat, gebiedNummer=0, spelerIndex = spelerNummerOphalen()-1, gebiedIndex=0, aantalStamleden;
+        int dobbelResultaat, gebiedNummer=0, spelerIndex = spelerNummerOphalen()-1, gebiedIndex=0, aantalPunten = 0, aantalStamleden, temp, grootsteWaarde=0;
         boolean gereedschap1 = false, gereedschap2 = false, gereedschap3 = false;
         //De stamleden en de gebieden waar ze opstaan worden afgeprint
         toonMijnStamleden();
@@ -863,39 +980,99 @@ public class DomeinController
             switch(gebiedIndex)
             {
                 case 0:
-                    //Geef de speler zijn stamleden terug
-                    //Geef de speler zijn reward
                     //Verwijder het aantal stamleden van het gebied
+                    temp = getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
+                    getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
+                    getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
+                    //Geef de speler zijn stamleden terug
+                    getSpelerLijst()[spelerIndex].setAantalStamleden(getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
+                    //Geef de speler zijn reward: 1 extra stamlid
+                    getSpelerLijst()[spelerIndex].setAantalStamleden(getSpelerLijst()[spelerIndex].getAantalStamleden()+1);
                 break;
                 case 1:
-                    //Geef de speler zijn stamleden terug
-                    //Geef de speler zijn reward
                     //Verwijder het aantal stamleden van het gebied
+                    temp = getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
+                    getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
+                    getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
+                    //Geef de speler zijn stamleden terug
+                    getSpelerLijst()[spelerIndex].setAantalStamleden(getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
+                    //Geef de speler zijn reward: 1 extra voedselproductie
+                    getSpelerLijst()[spelerIndex].setVoedselProductie(getSpelerLijst()[spelerIndex].getVoedselProductie()+1);
                 break;
                 case 2:
-                    //Geef de speler zijn stamleden terug
-                    //Geef de speler zijn reward
+                    //DEZE ZEKER NAKIJKEN
                     //Verwijder het aantal stamleden van het gebied
+                    temp = getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
+                    getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
+                    getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
+                    //Geef de speler zijn stamleden terug
+                    getSpelerLijst()[spelerIndex].setAantalStamleden(getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
+                    //Geef de speler zijn reward: 1 extra waarde van werktuig
+                    for (int loper=0;loper<getSpelerLijst()[spelerIndex].getGereedschapskistje().length;loper++)
+                    {
+                        //Als de waarde van het current gereedschap groter is als 0 dan kijk het naar de eerstvolgende 0
+                        //of lager getal, anders krijgt het zijn eerste gereedschap +1
+                        if (getSpelerLijst()[spelerIndex].getGereedschapskistje()[loper].getWaarde()> grootsteWaarde)
+                        {
+                            grootsteWaarde = getSpelerLijst()[spelerIndex].getGereedschapskistje()[loper].getWaarde();
+                        }
+                        else
+                        {
+                            if (loper==1)
+                            {
+                                getSpelerLijst()[spelerIndex].getGereedschapskistje()[loper+1].setWaarde(loper+1);
+                            }
+                            if (loper==2)
+                            {
+                                getSpelerLijst()[spelerIndex].getGereedschapskistje()[loper-2].setWaarde(loper+1);
+                            }
+                            break;
+                        }
+                    }
                 break;
                 case 8:
-                    //Geef de speler zijn stamleden terug
-                    //Geef de speler zijn punten + hut wordt verwijderd uit de lijst
                     //Verwijder het aantal stamleden van het gebied
+                    temp = getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
+                    getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
+                    getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
+                    //Geef de speler zijn stamleden terug
+                    getSpelerLijst()[spelerIndex].setAantalStamleden(getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
+                    //Geef speler het aantal punten + hut wordt verwijderd uit de lijst NOG TOEVOEGEN
+                    aantalPunten = getHutLijst()[8].berekenKostPrijsHut();
+                    getSpelerLijst()[spelerIndex].setPunten(getSpelerLijst()[spelerIndex].getPunten() + aantalPunten);
                 break;
                 case 9:
-                    //Geef de speler zijn stamleden terug
-                    //Geef de speler zijn punten + hut wordt verwijderd uit de lijst
                     //Verwijder het aantal stamleden van het gebied
+                    temp = getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
+                    getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
+                    getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
+                    //Geef de speler zijn stamleden terug
+                    getSpelerLijst()[spelerIndex].setAantalStamleden(getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
+                    //Geef speler het aantal punten + hut wordt verwijderd uit de lijst NOG TOEVOEGEN
+                    aantalPunten = getHutLijst()[9].berekenKostPrijsHut();
+                    getSpelerLijst()[spelerIndex].setPunten(getSpelerLijst()[spelerIndex].getPunten() + aantalPunten);
                 break;
                 case 10:
-                    //Geef de speler zijn stamleden terug
-                    //Geef de speler zijn punten + hut wordt verwijderd uit de lijst
                     //Verwijder het aantal stamleden van het gebied
+                    temp = getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
+                    getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
+                    getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
+                    //Geef de speler zijn stamleden terug
+                    getSpelerLijst()[spelerIndex].setAantalStamleden(getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
+                    //Geef speler het aantal punten + hut wordt verwijderd uit de lijst NOG TOEVOEGEN
+                    aantalPunten = getHutLijst()[10].berekenKostPrijsHut();
+                    getSpelerLijst()[spelerIndex].setPunten(getSpelerLijst()[spelerIndex].getPunten() + aantalPunten);
                 break;
                 case 11:
-                    //Geef de speler zijn stamleden terug
-                    //Geef de speler zijn punten + hut wordt verwijderd uit de lijst
                     //Verwijder het aantal stamleden van het gebied
+                    temp = getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
+                    getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
+                    getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
+                    //Geef de speler zijn stamleden terug
+                    getSpelerLijst()[spelerIndex].setAantalStamleden(getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
+                    //Geef speler het aantal punten + hut wordt verwijderd uit de lijst NOG TOEVOEGEN
+                    aantalPunten = getHutLijst()[11].berekenKostPrijsHut();
+                    getSpelerLijst()[spelerIndex].setPunten(getSpelerLijst()[spelerIndex].getPunten() + aantalPunten);
                 break;
             }
             

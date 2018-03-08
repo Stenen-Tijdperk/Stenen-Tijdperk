@@ -45,12 +45,12 @@ public final class Speler {
         
     }
     
-    private void setVoedselProductie(int voedselProductie)
+    public void setVoedselProductie(int voedselProductie)
     {
         this.voedselProductie = voedselProductie;
     }
     
-    private void setPunten(int punten)
+    public void setPunten(int punten)
     {
         this.punten = punten;
     }
@@ -61,7 +61,7 @@ public final class Speler {
         this.nummer = nummer;
     }
     
-    private void setAantalHout(int aantalHout) 
+    public void setAantalHout(int aantalHout) 
     {
         if (aantalHout < 0)
         {
@@ -70,7 +70,7 @@ public final class Speler {
         this.aantalHout = aantalHout;
     }
 
-    private void setAantalLeem(int aantalLeem) 
+    public void setAantalLeem(int aantalLeem) 
     {
         if (aantalLeem < 0)
         {
@@ -79,7 +79,7 @@ public final class Speler {
         this.aantalLeem = aantalLeem;
     }
 
-    private void setAantalSteen(int aantalSteen) 
+    public void setAantalSteen(int aantalSteen) 
     {
         if (aantalSteen < 0)
         {
@@ -88,7 +88,7 @@ public final class Speler {
         this.aantalSteen = aantalSteen;
     }
 
-    private void setAantalGoud(int aantalGoud) 
+    public void setAantalGoud(int aantalGoud) 
     {
         if (aantalGoud < 0)
         {
@@ -114,7 +114,7 @@ public final class Speler {
         this.aanBeurt = aanBeurt;
     }
 
-    private void setAantalVoedsel(int aantalVoedsel)
+    public void setAantalVoedsel(int aantalVoedsel)
     {
         if (aantalVoedsel < 0)
         {

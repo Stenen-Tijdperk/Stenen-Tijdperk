@@ -67,7 +67,7 @@ public final class Hut {
         return nummer;
     }
     
-    private int berekenKostPrijsHut()
+    public int berekenKostPrijsHut()
     {
         return (getAantalHoutPrijs() * 3 + getAantalLeemPrijs() * 4 + getAantalSteenPrijs() * 5 + getAantalGoudPrijs() * 6);
     }
