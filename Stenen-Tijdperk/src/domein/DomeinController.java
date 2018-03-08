@@ -320,7 +320,7 @@ public class DomeinController
     {  
         if(deelRonde2Gedaan())
         {
-          overgangVolgendeRonde(); 
+            deelRonde1Spelen();
         }
         else
         {
@@ -341,12 +341,7 @@ public class DomeinController
         }
         return gedaan;
     }
-    
-    private void overgangVolgendeRonde()
-    {
         
-    }
-    
     public void toonMenu1MetKeuze()
     {
         Scanner invoer = new Scanner(System.in);
@@ -488,10 +483,10 @@ public class DomeinController
             case 4:
                 do
                 {
-                System.out.print("Bent u zeker dat u geen stamleden wilt innen? Zeg ja of nee");
+                System.out.print("Bent u zeker dat u geen stamleden wilt innen? Zeg ja of nee: ");
                 antwoord = invoer.nextLine();
-                }while("ja".equals(antwoord) || "nee".equals(antwoord));
-                if("nee".equals(antwoord))
+                }while((!antwoord.toLowerCase().equals("ja")) && (!antwoord.toLowerCase().equals("nee")));
+                if(antwoord.equals("nee"))
                 {
                     deelRonde2Spelen();
                 }
@@ -548,6 +543,30 @@ public class DomeinController
             }
                 deelRonde1Spelen();
         }
+    }
+    
+    private void beurtOverslaan2()
+    {
+       int spelerIndex=spelerNummerOphalen()-1, spelerNummer = spelerNummerOphalen();
+        
+        //Beurt van speler aan beurt veranderen
+        getSpelerLijst()[spelerIndex].setAanBeurt(false); 
+        
+        //Indien laatste speler aan de beurt is, krijgt eerste speler de beurt
+        //Zo niet dan krijgt de volgende speler de beurt
+        if (spelerNummer == getSpelerLijst().length)
+        {
+            spelerNummer = 1;
+            spelerIndex = 0;
+        }
+        else
+        {
+            spelerNummer++;
+            spelerIndex++;
+        }
+        
+        //Beurt van volgende speler op true zetten
+        getSpelerLijst()[spelerNummer-1].setAanBeurt(true); 
     }
     
     private void plaatsStamleden(int gebiedNummer, int aantalStamleden)
@@ -695,29 +714,136 @@ public class DomeinController
     {
         Scanner invoer = new Scanner(System.in);
         String antwoord;
-        int dobbelResultaat, gereedschap1 = 0, gereedschap2 = 0, gereedschap3 = 0, gebiedNummer, spelerIndex = spelerNummerOphalen()-1, gebiedIndex=0, aantalStamleden;
-                
+        int dobbelResultaat, gebiedNummer, spelerIndex = spelerNummerOphalen()-1, gebiedIndex=0, aantalStamleden;
+        boolean gereedschap1 = false, gereedschap2 = false, gereedschap3 = false;
+        
+        toonGebieden();
         toonMijnStamleden();
         
+        //Gebiednummer opvragen van de speler
+        do{
         System.out.println("Van welk gebied wilt u uw stamleden innen?");
         gebiedNummer = invoer.nextInt();
+        }while(gebiedNummer < 0 && gebiedNummer > 9);
         
         gebiedIndex = gebiedNummer -1;
+        //De stamleden van dat gebied worden opgehaald en opgeslagen in aantalStamleden
         aantalStamleden = getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
         
-        dobbelResultaat = dobbelen(aantalStamleden);
-        System.out.printf("U hebt %d gedobbeld.", dobbelResultaat);
-                
-        do{
-            System.out.print("Wilt u uw gereedschap gebruiken?");
-            antwoord = invoer.nextLine();
-        }while("ja".equals(antwoord) || "nee".equals(antwoord));
-        gebruikGereedschap(dobbelResultaat, gereedschap1, gereedschap2, gereedschap3);
+        
+        //De hut, voedselproductie, gereedschapsmaker en een hut kopen
+        if ((gebiedIndex >= 0 && gebiedIndex <= 3) || gebiedIndex == 8)
+        {
+            switch(gebiedIndex)
+            {
+                case 0:
+                    //Geef de speler zijn stamleden terug
+                    //Geef de speler zijn reward
+                    //Verwijder het aantal stamleden van het gebied
+                break;
+                case 1:
+                    //Geef de speler zijn stamleden terug
+                    //Geef de speler zijn reward
+                    //Verwijder het aantal stamleden van het gebied
+                break;
+                case 2:
+                    //Geef de speler zijn stamleden terug
+                    //Geef de speler zijn reward
+                    //Verwijder het aantal stamleden van het gebied
+                break;
+                case 8:
+                    //Geef de speler zijn stamleden terug
+                    //Geef de speler zijn reward
+                    //Verwijder het aantal stamleden van het gebied
+                break;
+            }
+            
+        }
+        else
+        {
+            dobbelResultaat = dobbelen(aantalStamleden);
+            System.out.printf("U hebt %d gedobbeld.", dobbelResultaat);
+        
+            if(controleerOfGereedschapBezit(spelerIndex))
+            {
+              toonMijnGereedschap();
+                do{
+                    System.out.print("Wilt u uw gereedschap gebruiken?");
+                    antwoord = invoer.nextLine();
+                }while((!antwoord.toLowerCase().equals("ja")) && (!antwoord.toLowerCase().equals("nee")));
+                gebruikGereedschap(dobbelResultaat, gereedschap1, gereedschap2, gereedschap3);  
+            }
+            else
+            {
+                System.out.print("U bezit geen gereedschap dat u kan gebruiken.");
+            }
+        }
+        
     }
     
-    private int gebruikGereedschap(int dobbelResultaat, int gereedschap1, int gereedschap2, int gereedschap3)
+    private boolean controleerOfGereedschapBezit(int spelerIndex)
     {
-        return dobbelResultaat + gereedschap1 + gereedschap2 + gereedschap3;
+        //True betekent dat de speler gereedschap bezit
+        boolean oke = false;
+        for (Gereedschap gereedschap : getSpelerLijst()[spelerIndex].getGereedschapskistje())
+        {
+            if (gereedschap.getWaarde() > 0 && gereedschap.getReedsGebruiktDezeRonde() == false)
+            {
+                oke = true;
+            }
+        }
+        return oke;
+    }
+    
+    private int gebruikGereedschap(int dobbelResultaat, boolean gereedschap1, boolean gereedschap2, boolean gereedschap3)
+    {
+        int gereedschap1Waarde = 0, gereedschap2Waarde = 0, gereedschap3Waarde = 0, spelerIndex = spelerNummerOphalen() - 1;
+        //De waarde van al het gereedschap wordt opgehaald
+        gereedschap1Waarde = getSpelerLijst()[spelerIndex].getGereedschapskistje()[0].getWaarde();
+        gereedschap2Waarde = getSpelerLijst()[spelerIndex].getGereedschapskistje()[1].getWaarde();
+        gereedschap3Waarde = getSpelerLijst()[spelerIndex].getGereedschapskistje()[2].getWaarde();
+        //De waarde van het gereedschap wordt bijgeteld als het gebruikt wordt
+        if (gereedschap1 == true)
+        {
+            dobbelResultaat =  dobbelResultaat + gereedschap1Waarde;
+            
+            if(gereedschap2 == true)
+            {
+                dobbelResultaat =  dobbelResultaat + gereedschap2Waarde;
+                
+                if(gereedschap3 == true)
+                {
+                    dobbelResultaat = dobbelResultaat + gereedschap3Waarde;
+                } 
+            }
+            else
+            {
+                if (gereedschap3 == true)
+                {
+                    dobbelResultaat = dobbelResultaat + gereedschap3Waarde;
+                }
+            }
+        }
+        else
+        {
+            if(gereedschap2 == true)
+            {
+                dobbelResultaat =  dobbelResultaat + gereedschap2Waarde;
+                
+                if(gereedschap3 == true)
+                {
+                    dobbelResultaat = dobbelResultaat + gereedschap3Waarde;
+                }
+            }
+            else
+            {
+                if(gereedschap3 == true)
+                {
+                    dobbelResultaat = dobbelResultaat + gereedschap3Waarde;
+                }
+            }    
+        }
+        return dobbelResultaat;
     }
     
     private int dobbelen(int aantalStamleden)
@@ -733,7 +859,27 @@ public class DomeinController
     
     private void geenStamledenInnen()
     {
+        Scanner invoer = new Scanner(System.in);
+        int spelerIndex = spelerNummerOphalen() - 1, gebiedNummer = 0, gebiedIndex = 0, temp;
         
+        toonGebieden();
+        toonMijnStamleden();
+        do{
+        System.out.println("Van welk gebied wil je je stamleden weghalen zonder iets te krijgen?");
+        gebiedNummer = invoer.nextInt();
+        }while(gebiedNummer < 0 && gebiedNummer > 9);
+        
+        gebiedIndex = gebiedNummer - 1;        
+        
+        //Het aantal stamleden van speler [spelerIndex] dat op gebied [gebiedIndex] staan worden opgeslagen
+        temp = getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
+        //De stamleden worden van het gebied verwijderd
+        getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
+        //De speler krijgt zijn stamleden terug
+        getSpelerLijst()[spelerIndex].setAantalStamleden(getSpelerLijst()[spelerIndex].getAantalStamleden()+ temp);
+        //De volgende speler krijgt de beurt
+        beurtOverslaan2();
+        toonMenu2MetKeuze();
     }
     
     private int spelerNummerOphalen()

@@ -11,6 +11,7 @@ public final class Speler {
     private int aantalVoedsel;
     private int aantalStamleden;
     private int nummer;
+    private int punten;
     private String naam;
     private String kleur;
     private boolean aanBeurt = false;
@@ -29,6 +30,7 @@ public final class Speler {
         setAantalGoud(0);
         setAantalVoedsel(12);
         setGereedschapskistje();
+        setPunten(0);
     }
 
     public Gereedschap[] getGereedschapskistje()
@@ -40,12 +42,22 @@ public final class Speler {
     {
         gereedschapskistje = new Gereedschap[3];
         
-        for(int loper=0; loper<gereedschapskistje.length;loper++)
+        for(int loper=0; loper<getGereedschapskistje().length;loper++)
         {
             Gereedschap gereedschapje = new Gereedschap(loper+1, 0, false);
             gereedschapskistje[loper] = gereedschapje;
         }
         
+    }
+    
+    private void setPunten(int aantalPunten)
+    {
+        this.punten = punten;
+    }
+    
+    private int getPunten()
+    {
+        return punten;
     }
     
     
@@ -181,7 +193,8 @@ public final class Speler {
     {
         String leeg = "";
         return String.format("%n%s: %d %10s | KLEUR:%9s | Aantal ongebruikte stamleden: %4d | Aan de beurt: %3s %18s |%n "
-                    + "%20s| Aantal hout: %2d | Aantal leem: %2d | Aantal steen: %2d | Aantal goud: %2d | Aantal voedsel: %2d |%n",
+                    + "%20s| Aantal hout: %2d | Aantal leem: %2d | Aantal steen: %2d | Aantal goud: %2d | Aantal voedsel: %2d |%n"
+                    + "%20s | Aantal overwinningspunten: %d",
                 this.getClass().getSimpleName().toUpperCase(), 
                 getNummer(), 
                 getNaam(),
@@ -194,7 +207,9 @@ public final class Speler {
                 getAantalLeem(), 
                 getAantalSteen(), 
                 getAantalGoud(), 
-                getAantalVoedsel()
+                getAantalVoedsel(),
+                leeg,
+                getPunten()
                 );
     }
 }
