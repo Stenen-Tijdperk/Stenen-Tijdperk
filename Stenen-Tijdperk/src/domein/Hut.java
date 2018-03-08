@@ -17,58 +17,67 @@ public final class Hut {
         setNummer(nummer);
     }
     
-    public int berekenKostPrijsHut()
-    {
-        return (getAantalHoutPrijs() + getAantalLeemPrijs() + getAantalSteenPrijs() + getAantalGoudPrijs());
-    }
-    
-    public void setAantalHoutPrijs(int aantalHoutPrijs) 
+    private final void setAantalHoutPrijs(int aantalHoutPrijs) 
     {
         this.aantalHoutPrijs = aantalHoutPrijs;
     }
 
-    public void setAantalLeemPrijs(int aantalLeemPrijs) 
+    private final void setAantalLeemPrijs(int aantalLeemPrijs) 
     {
         this.aantalLeemPrijs = aantalLeemPrijs;
     }
 
-    public void setAantalSteenPrijs(int aantalSteenPrijs) 
+    private final void setAantalSteenPrijs(int aantalSteenPrijs) 
     {
         this.aantalSteenPrijs = aantalSteenPrijs;
     }
 
-    public void setAantalGoudPrijs(int aantalGoudPrijs) 
+    private final void setAantalGoudPrijs(int aantalGoudPrijs) 
     {
         this.aantalGoudPrijs = aantalGoudPrijs;
     }
 
-    private void setNummer(int nummer)
+    private final void setNummer(int nummer)
     {
         this.nummer = nummer;
+    }
+    
+    private int getAantalHoutPrijs() 
+    {
+        return aantalHoutPrijs;
+    }
+
+    private int getAantalLeemPrijs() 
+    {
+        return aantalLeemPrijs;
+    }
+
+    private int getAantalSteenPrijs() 
+    {
+        return aantalSteenPrijs;
+    }
+
+    private int getAantalGoudPrijs() 
+    {
+        return aantalGoudPrijs;
     }
     
     public int getNummer()
     {
         return nummer;
     }
-
-    public int getAantalHoutPrijs() 
+    
+    private int berekenKostPrijsHut()
     {
-        return aantalHoutPrijs;
+        return (getAantalHoutPrijs() * 3 + getAantalLeemPrijs() * 4 + getAantalSteenPrijs() * 5 + getAantalGoudPrijs() * 6);
     }
-
-    public int getAantalLeemPrijs() 
+    @Override
+    public String toString()
     {
-        return aantalLeemPrijs;
-    }
-
-    public int getAantalSteenPrijs() 
-    {
-        return aantalSteenPrijs;
-    }
-
-    public int getAantalGoudPrijs() 
-    {
-        return aantalGoudPrijs;
+        return String.format("%s %2d | Kost: %d hout %d leem %d steen en %d goud | Waarde: %2d punten.%n",
+                this.getClass().getSimpleName().toUpperCase(),
+                getNummer(), getAantalHoutPrijs(),
+                getAantalLeemPrijs(), getAantalSteenPrijs(),
+                getAantalGoudPrijs(), berekenKostPrijsHut());
     }
 }

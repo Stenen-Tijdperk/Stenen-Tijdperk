@@ -143,51 +143,59 @@ public class DomeinController
     private void aanmakenGebieden()
     {   
         //Lijst voor alle gebieden op te slaan
-        this.gebiedLijst = new Gebied[9];
+        this.gebiedLijst = new Gebied[12];
         
         //Constructors van gebieden: Gebied(gebiedNaam, max aantal stamleden, functie, gebiedNummer)
-        Gebied hut = new Gebied("hut",2,"stamlid + 1", 1);
+        Gebied hut = new Gebied("hut",2,"extra stamlid", 1);
         gebiedLijst[0] = hut;
         
-        Gebied akker = new Gebied("akker",1,"voedselproductie + 1",2);
+        Gebied akker = new Gebied("akker",1,"voedselproductie +1",2);
         gebiedLijst[1] = akker;
         
-        Gebied gereedschapmaker = new Gebied("gereedschapmaker",1,"+ gereedschap + 1",3);
+        Gebied gereedschapmaker = new Gebied("gereedschapmaker",1,"gereedschap + 1",3);
         gebiedLijst[2] = gereedschapmaker;
         
-        Gebied jacht = new Gebied("jacht",40,"voedsel + x",4);
+        Gebied jacht = new Gebied("jacht",40,"gedobbeld voedsel /2",4);
         gebiedLijst[3] = jacht;
         
-        Gebied bos = new Gebied("bos",7,"hout + x",5);
+        Gebied bos = new Gebied("bos",7,"gedobbeld hout /3",5);
         gebiedLijst[4] = bos;
         
-        Gebied leemgroeve = new Gebied("leemgroeve",7,"leem + x",6);
+        Gebied leemgroeve = new Gebied("leemgroeve",7,"gedobbeld leem /4",6);
         gebiedLijst[5] = leemgroeve;
         
-        Gebied steengroeve = new Gebied("steengroeve",7,"steen + x",7);
+        Gebied steengroeve = new Gebied("steengroeve",7,"gedobbeld steen /5",7);
         gebiedLijst[6] = steengroeve;
         
-        Gebied rivier = new Gebied("rivier",7,"goud + x",8);
+        Gebied rivier = new Gebied("rivier",7,"gedobbeld goud /6",8);
         gebiedLijst[7] = rivier;
         
-        Gebied hutKopen = new Gebied("huisjes markt",1,"koop een huisje",9);
-        gebiedLijst[8] = hutKopen;
+        Gebied hutKopen1 = new Gebied("koop hut 1",1,"koop hut 1",9);
+        gebiedLijst[8] = hutKopen1;
+        
+        Gebied hutKopen2 = new Gebied("koop hut 2",1,"koop hut 2",10);
+        gebiedLijst[9] = hutKopen2;
+        
+        Gebied hutKopen3 = new Gebied("koop hut 3",1,"koop hut 3",11);
+        gebiedLijst[10] = hutKopen3;
+        
+        Gebied hutKopen4 = new Gebied("koop hut 4",1,"koop hut 4",12);
+        gebiedLijst[11] = hutKopen4;
     }
     
     private void aanmakenHutten()
     {
+        SecureRandom random = new SecureRandom();
         //Hutlijst wordt aangemaakt, alle hutten zijn null
         this.hutLijst = new Hut[28];
-        
+        //Alle waardes worden geïnitialiseerd
         int hout = 0, leem = 0, steen = 0, goud = 0, getal = 0;
-        
-        for (int aantalHutten=0;aantalHutten<=27;aantalHutten++)
+        //Alle hutten hun kostprijs word random generereert
+        for (int aantalHutten=0;aantalHutten<getHutLijst().length;aantalHutten++)
         {
-            SecureRandom random = new SecureRandom();
-            for(int loper=0;loper==3;loper++)
-            {
-                getal= random.nextInt(4);
-
+            for(int loper=0;loper<3;loper++)
+            { 
+                    getal = random.nextInt(4) +1; //Zonder +1 zou 0 kunnen voorkomen
                 switch(getal)
                 {
                     case 1: hout++;
@@ -197,19 +205,21 @@ public class DomeinController
                     case 3: steen++;
                     break;
                     case 4: goud++;
+                    break;
                 }
             }
-        
             //Hut wordt aangemaakt
-            Hut hut = new Hut(hout, leem, steen, goud, aantalHutten);
+            Hut hut = new Hut(hout, leem, steen, goud, aantalHutten+1);
             //Hut wordt opgeslagen
             hutLijst[aantalHutten] = hut;
+            //Kostwaarde resetten voor volgende hut
+            hout = 0; leem = 0; steen = 0; goud = 0; getal = 0;
         }
     }
     
     private void aanmakenLocatieLijst()
     {
-         stamledenLocatieLijst =new int[getSpelerLijst().length][9];
+         stamledenLocatieLijst =new int[getSpelerLijst().length][12];
     }
 
     public void preLoadSpel()
@@ -242,23 +252,47 @@ public class DomeinController
         {
             //toString van klasse Speler oproepen
             System.out.print(speler.toString());
-            
+            //Witte lijn tussen elke speler voor overzicht
             System.out.println();
         }
     }
     
     private void toonGebieden()
     {
-        for (Gebied gebied : getGebiedLijst()) {
+        Scanner invoer = new Scanner(System.in);
+        String antwoord;
+        //Print de toString uit van alle gebieden
+        for (Gebied gebied : getGebiedLijst())
+        {
             System.out.print(gebied.toString());
+            //Witte lijn tussen elk gebied voor overzicht
             System.out.println();
+        }
+        //Huisjesmarkt bekijken (= gebied 8 t.e.m. 12)
+        do{
+        System.out.println("Wil je de huisjesmarkt zien?");
+        antwoord = invoer.nextLine();
+        }while((!antwoord.toLowerCase().equals("ja")) && (!antwoord.toLowerCase().equals("nee")));
+        //Witte lijn voor overzicht
+        System.out.println();
+        //De eerste 4 huisjes tonen, als een huisje wordt gekocht verwijdert men het object en het getal uit de array
+        if(antwoord.toLowerCase().equals("ja"))
+        {
+            System.out.printf("%s%n", getHutLijst()[0].toString());
+            System.out.printf("%s%n", getHutLijst()[1].toString());
+            System.out.printf("%s%n", getHutLijst()[2].toString());
+            System.out.printf("%s%n", getHutLijst()[3].toString());
         }
     }
     
+    //Deze methode wordt niet gebruikt maar is handig voor tijdens het programmeren
+    //Zo kunnen we zien of de hutten werken
     private void toonHutten()
     {
-        for (Hut hut : getHutLijst()) {
+        for (Hut hut : getHutLijst())
+        {
             System.out.print(hut.toString());
+            //Witte lijn tussen elke hut voor overzicht
             System.out.println();
         }
     }
@@ -266,15 +300,23 @@ public class DomeinController
     private void toonMijnGereedschap()
     {
         int spelerIndex= spelerNummerOphalen()-1,
-                lengteVanGereedschapskistje = getSpelerLijst()[spelerIndex].getGereedschapskistje().length;
-        
-        for(int gereedschap=0;gereedschap<lengteVanGereedschapskistje;gereedschap++)
+                lengteGereedschapskistje = getSpelerLijst()[spelerIndex].getGereedschapskistje().length;
+        //Men overloopt de 3 objecten
+        for(int gereedschap=0;gereedschap<lengteGereedschapskistje;gereedschap++)
         {
+            //Als het een null-object is dan wordt het niet uitgeprint, dan 1 lijn commentaar in de else
+            if (getSpelerLijst()[spelerIndex].getGereedschapskistje()[gereedschap].getWaarde() > 0)
+            {
             System.out.printf("Gereedschap %d | Waarde: %d | Reeds gebruikt deze ronde: %s%n",
-                    spelerLijst[spelerIndex].getGereedschapskistje()[gereedschap].getNummer(),
-                    spelerLijst[spelerIndex].getGereedschapskistje()[gereedschap].getWaarde(),
-                    spelerLijst[spelerIndex].getGereedschapskistje()[gereedschap].getReedsGebruiktDezeRonde()?"ja":"nee"
+                    getSpelerLijst()[spelerIndex].getGereedschapskistje()[gereedschap].getNummer(),
+                    getSpelerLijst()[spelerIndex].getGereedschapskistje()[gereedschap].getWaarde(),
+                    getSpelerLijst()[spelerIndex].getGereedschapskistje()[gereedschap].getReedsGebruiktDezeRonde()?"ja":"nee"
                     );
+            }
+            else
+            {
+                System.out.printf("Je hebt gereedschap nummer %d (nog) niet.%n", gereedschap+1);
+            }
         }
         //Witte lijn voor overzicht
         System.out.println();
@@ -288,16 +330,15 @@ public class DomeinController
     private void overgangVolgendeDeelronde()
     {
             int spelerIndex = spelerNummerOphalen()-1, spelerNummer = spelerNummerOphalen();
-            
             System.out.println("De deelronde voor het plaatsen van de stamleden is afgelopen.");
             //Speluitslag afprinten na deelronde van het paatsen
             toonSpelers();
             System.out.println();
             toonGebieden();
-            
-            //Volgende speler krijgt de beurt
+            //Speler die aan beurt was verliest zijn beurt
              getSpelerLijst()[spelerIndex].setAanBeurt(false); 
-        
+            //Als de laatste speler aan beurt was dan krijgt de eerste speler de beurt,
+            //anders krijgt de volgende speler de beurt
             if (spelerNummer == getSpelerLijst().length)
             {
                 spelerNummer = 1;
@@ -308,19 +349,60 @@ public class DomeinController
                 spelerNummer++;
                 spelerIndex++;
             }
-        
             //Beurt van volgende speler op true zetten
             getSpelerLijst()[spelerNummer-1].setAanBeurt(true);
-            
             //Overgaan naar volgende deelronde
             deelRonde2Spelen();
     }
     
     private void deelRonde2Spelen()
     {  
+        int meestePunten = 0, minstePunten=100;
+        //Elke 2e deelronde wordt de speler met de meeste en met de minste punten bijgehouden
+        //NOG TE DOEN: HOE RANG BIJHOUDEN VAN 2 MIDDELSTE SPELERS
+        for (Speler speler : getSpelerLijst())
+        {
+            if(speler.getPunten() > meestePunten)
+            {
+                meestePunten = speler.getPunten();
+            }
+            if(speler.getPunten() < minstePunten)
+            {
+                minstePunten = speler.getPunten();
+            }
+        }
+        /*
+        Kijken of iedereen zijn stamleden al heeft teruggenomen:
+        Zo ja:
+            dan gaat men kijken of het spel gedaan is. Als dat niet
+        het geval is dan speelt men weer de eerste ronden.
+        Zo niet:
+            dan speelt men verder in de 2e deelronde
+        */
         if(deelRonde2Gedaan())
         {
-            deelRonde1Spelen();
+            if(spelGedaan())
+            {
+                System.out.printf("Het spel is gedaan want alle hutten zijn gekocht.%n"
+                        + "De eindstand is als volgt:%n");
+                toonSpelers();
+                //De spelers overlopen en de speler met het meeste punten wint
+                for (Speler speler : getSpelerLijst())
+                {
+                    if(speler.getPunten() == meestePunten)
+                    {
+                        System.out.printf("Speler %s heeft gewonnen met %d punten.%n",
+                                speler.getNaam(), speler.getPunten());
+                    }
+                }
+            }
+            else
+            {
+                //Het gereedschap zijn reedsGebruikt wordt weer op false gezet
+                gereedschapResetten();
+                //Men speelt weer de eerste deelronde
+                deelRonde1Spelen();
+            }
         }
         else
         {
@@ -328,20 +410,40 @@ public class DomeinController
         }
     }
     
+    private boolean spelGedaan()
+    {
+        //Als het true is dan is het spel volledig gedaan
+        boolean gedaan = false;
+        //Men kijkt of de hele lijst van hutten leeg is
+        //want altijd als men een hut koopt dan verdwijnt dat element
+        //uit de hutlijst array
+        if (getHutLijst().length < 1)
+        {
+            gedaan = true;
+        }
+        
+        return gedaan;
+    }
+    
     private boolean deelRonde2Gedaan()
     {
         //True is gelijk aan het spel is gedaan
         boolean gedaan = true;
-        for (int[] spelersrij : getStamledenLocatieLijst()) {
-            for (int kolom = 0; kolom < spelersrij.length; kolom++) {
-                if (spelersrij[kolom] != 0) {
+        //Men kijkt of er nog waardes in de stamledenLocatieLijst zijn
+        //die NIET nul zijn, want dan is de 2e speelronde nog niet gedaan
+        for (int[] spelersrij : getStamledenLocatieLijst())
+        {
+            for (int kolom = 0; kolom < spelersrij.length; kolom++)
+            {
+                if (spelersrij[kolom] != 0)
+                {
                     gedaan = false;
                 }
             }
         }
         return gedaan;
     }
-        
+    
     public void toonMenu1MetKeuze()
     {
         Scanner invoer = new Scanner(System.in);
@@ -393,7 +495,7 @@ public class DomeinController
                     System.out.println("Voer een getal in.");
                     invoer.nextLine();
                     }
-                }while(gebiedNummer <= 0 || gebiedNummer > 9);
+                }while(gebiedNummer <= 0 || gebiedNummer > 12);
 
                 do{
                     try
@@ -486,6 +588,8 @@ public class DomeinController
                 System.out.print("Bent u zeker dat u geen stamleden wilt innen? Zeg ja of nee: ");
                 antwoord = invoer.nextLine();
                 }while((!antwoord.toLowerCase().equals("ja")) && (!antwoord.toLowerCase().equals("nee")));
+                //Als de speler niet zeker is dan krijgt hij opnieuw de kans
+                //een actie uit te voeren
                 if(antwoord.equals("nee"))
                 {
                     deelRonde2Spelen();
@@ -585,9 +689,9 @@ public class DomeinController
         
         try{
             //Het aantal genomen plaatsen wordt aangepast
-        getGebiedLijst()[gebiedNummer-1].setAantalGenomenPlaatsen(getGebiedLijst()[gebiedNummer-1].getAantalGenomenPlaatsen()+aantalStamleden);
+            getGebiedLijst()[gebiedNummer-1].setAantalGenomenPlaatsen(getGebiedLijst()[gebiedNummer-1].getAantalGenomenPlaatsen()+aantalStamleden);
             //Het aantal stamleden van de speler wordt verminderd
-        getSpelerLijst()[spelerIndex].setAantalStamleden(getSpelerLijst()[spelerIndex].getAantalStamleden()-aantalStamleden);
+            getSpelerLijst()[spelerIndex].setAantalStamleden(getSpelerLijst()[spelerIndex].getAantalStamleden()-aantalStamleden);
         }
         catch(IllegalArgumentException ex)
         {
@@ -608,15 +712,28 @@ public class DomeinController
         {
             for (int loper = 0; loper < getStamledenLocatieLijst()[spelerIndex].length; loper++) 
                 {
-                System.out.printf("Speler %s heeft %d %s op %s.%n",
+                    //Men kijkt of het gebieden van de speler bezet zijn
+                    //Zo niet dan wordt het niet uitgeprint
+                    if(getStamledenLocatieLijst()[spelerIndex][loper] > 0)
+                    {
+                        System.out.printf("Speler %s heeft %d %s op %s (gebied nummer %d).%n",
                         getSpelerLijst()[spelerIndex].getNaam(), getStamledenLocatieLijst()[spelerIndex][loper],
                         getStamledenLocatieLijst()[spelerIndex][loper]==1?"stamlid":"stamleden",
-                        getGebiedLijst()[loper].getNaamGebied());
+                        getGebiedLijst()[loper].getNaamGebied(),
+                        getGebiedLijst()[loper].getNummer());
+                    }
                 }
+            //Het aantal ongebruikte stamleden wordt ook afgeprint, indien er zijn
+            if(getSpelerLijst()[spelerIndex].getAantalStamleden() > 0)
+            {
+                System.out.printf("Speler %s heeft %d ongebruikte stamleden.%n",
+                        getSpelerLijst()[spelerIndex].getNaam(),
+                        getSpelerLijst()[spelerIndex].getAantalStamleden());
+            }
         }
-        catch(ArrayIndexOutOfBoundsException tonen)
+        catch(ArrayIndexOutOfBoundsException tonenVanStamleden)
         {
-            System.out.println("Geef een geldig aantal.");
+            System.out.println("Error bij het tonen van de stamleden.");
         }
         
         //Witte lijn voor overzicht
@@ -692,7 +809,7 @@ public class DomeinController
         }
         
         //Je kan niet plaatsen op een gebied waar je eerder al hebt geplaatst
-        if (stamledenLocatieLijst[spelerIndex][gebiedIndex] != 0)
+        if (getStamledenLocatieLijst()[spelerIndex][gebiedIndex] != 0)
         {
             oke = false;
             System.out.println("Je hebt in een vorige ronde al op dat gebied stamleden geplaatst.");
@@ -710,30 +827,39 @@ public class DomeinController
         return oke;
     }
     
+    //AAN DEZE METHODE IS ER SUPERVEEL WERK, DIT IS HET BELANGRIJKSTE DAT NOG MOET GEBEUREN
     private void stamledenInnen()
     {
         Scanner invoer = new Scanner(System.in);
         String antwoord;
-        int dobbelResultaat, gebiedNummer, spelerIndex = spelerNummerOphalen()-1, gebiedIndex=0, aantalStamleden;
+        int dobbelResultaat, gebiedNummer=0, spelerIndex = spelerNummerOphalen()-1, gebiedIndex=0, aantalStamleden;
         boolean gereedschap1 = false, gereedschap2 = false, gereedschap3 = false;
-        
-        toonGebieden();
+        //De stamleden en de gebieden waar ze opstaan worden afgeprint
         toonMijnStamleden();
-        
         //Gebiednummer opvragen van de speler
         do{
-        System.out.println("Van welk gebied wilt u uw stamleden innen?");
-        gebiedNummer = invoer.nextInt();
-        }while(gebiedNummer < 0 && gebiedNummer > 9);
-        
+            try
+            {
+                System.out.println("Van welk gebied wilt u uw stamleden innen?");
+                gebiedNummer = invoer.nextInt();
+                invoer.nextLine();
+            }
+            catch (InputMismatchException stamledenInnenVanGebieden) 
+            {
+                invoer.nextLine();
+                System.out.println("Voer een getal in.");
+            }
+        }while(gebiedNummer < 0 && gebiedNummer > 13);
+        //De gebiedindex wordt berekend
         gebiedIndex = gebiedNummer -1;
         //De stamleden van dat gebied worden opgehaald en opgeslagen in aantalStamleden
         aantalStamleden = getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
-        
-        
-        //De hut, voedselproductie, gereedschapsmaker en een hut kopen
-        if ((gebiedIndex >= 0 && gebiedIndex <= 3) || gebiedIndex == 8)
+        //De hut, voedselproductie, gereedschapsmaker (gebiedIndex 0 t.e.m. 2)
+        //Voor hutten kopen (gebiedIndex 8 t.e.m. 11)
+        //NAKIJKEN: klopt de voorwaarde wel???
+        if ((gebiedIndex >= 0 && gebiedIndex <= 2) || (gebiedIndex >= 8 && gebiedIndex <= 11))
         {
+            //Voor deze speciale gebieden krijgt de speler zijn rewards
             switch(gebiedIndex)
             {
                 case 0:
@@ -753,7 +879,22 @@ public class DomeinController
                 break;
                 case 8:
                     //Geef de speler zijn stamleden terug
-                    //Geef de speler zijn reward
+                    //Geef de speler zijn punten + hut wordt verwijderd uit de lijst
+                    //Verwijder het aantal stamleden van het gebied
+                break;
+                case 9:
+                    //Geef de speler zijn stamleden terug
+                    //Geef de speler zijn punten + hut wordt verwijderd uit de lijst
+                    //Verwijder het aantal stamleden van het gebied
+                break;
+                case 10:
+                    //Geef de speler zijn stamleden terug
+                    //Geef de speler zijn punten + hut wordt verwijderd uit de lijst
+                    //Verwijder het aantal stamleden van het gebied
+                break;
+                case 11:
+                    //Geef de speler zijn stamleden terug
+                    //Geef de speler zijn punten + hut wordt verwijderd uit de lijst
                     //Verwijder het aantal stamleden van het gebied
                 break;
             }
@@ -761,10 +902,11 @@ public class DomeinController
         }
         else
         {
+            //Voor deze gebieden moet er gedobbelt worden
             dobbelResultaat = dobbelen(aantalStamleden);
             System.out.printf("U hebt %d gedobbeld.", dobbelResultaat);
         
-            if(controleerOfGereedschapBezit(spelerIndex))
+            if(controleerOfBeschikbaarGereedschapBezit(spelerIndex))
             {
               toonMijnGereedschap();
                 do{
@@ -781,10 +923,11 @@ public class DomeinController
         
     }
     
-    private boolean controleerOfGereedschapBezit(int spelerIndex)
+    private boolean controleerOfBeschikbaarGereedschapBezit(int spelerIndex)
     {
-        //True betekent dat de speler gereedschap bezit
+        //True betekent dat de speler bruikbaar gereedschap bezit
         boolean oke = false;
+        //Als de waarde groter is als nul en het is nog niet gebruikt dan kan de speler zijn gereedschap gebruiken
         for (Gereedschap gereedschap : getSpelerLijst()[spelerIndex].getGereedschapskistje())
         {
             if (gereedschap.getWaarde() > 0 && gereedschap.getReedsGebruiktDezeRonde() == false)
@@ -803,43 +946,52 @@ public class DomeinController
         gereedschap2Waarde = getSpelerLijst()[spelerIndex].getGereedschapskistje()[1].getWaarde();
         gereedschap3Waarde = getSpelerLijst()[spelerIndex].getGereedschapskistje()[2].getWaarde();
         //De waarde van het gereedschap wordt bijgeteld als het gebruikt wordt
-        if (gereedschap1 == true)
+        //Ook wordt de waarde op false gezet als het gebruikt wordt
+        //Voor dat kan gebeuren wordt er eerst gecheckt of het nog niet gebruikt is tho
+        if (gereedschap1 == true && getSpelerLijst()[spelerIndex].getGereedschapskistje()[0].getReedsGebruiktDezeRonde() == false)
         {
             dobbelResultaat =  dobbelResultaat + gereedschap1Waarde;
+            getSpelerLijst()[spelerIndex].getGereedschapskistje()[0].setReedsGebruiktDezeRonde(true);
             
-            if(gereedschap2 == true)
+            if(gereedschap2 == true && getSpelerLijst()[spelerIndex].getGereedschapskistje()[1].getReedsGebruiktDezeRonde() == false)
             {
                 dobbelResultaat =  dobbelResultaat + gereedschap2Waarde;
+                getSpelerLijst()[spelerIndex].getGereedschapskistje()[1].setReedsGebruiktDezeRonde(true);
                 
-                if(gereedschap3 == true)
+                if(gereedschap3 == true && getSpelerLijst()[spelerIndex].getGereedschapskistje()[2].getReedsGebruiktDezeRonde() == false)
                 {
                     dobbelResultaat = dobbelResultaat + gereedschap3Waarde;
+                    getSpelerLijst()[spelerIndex].getGereedschapskistje()[2].setReedsGebruiktDezeRonde(true);
                 } 
             }
             else
             {
-                if (gereedschap3 == true)
+                if (gereedschap3 == true && getSpelerLijst()[spelerIndex].getGereedschapskistje()[2].getReedsGebruiktDezeRonde() == false)
                 {
                     dobbelResultaat = dobbelResultaat + gereedschap3Waarde;
+                    getSpelerLijst()[spelerIndex].getGereedschapskistje()[2].setReedsGebruiktDezeRonde(true);
                 }
             }
         }
         else
         {
-            if(gereedschap2 == true)
+            if(gereedschap2 == true && getSpelerLijst()[spelerIndex].getGereedschapskistje()[1].getReedsGebruiktDezeRonde() == false)
             {
                 dobbelResultaat =  dobbelResultaat + gereedschap2Waarde;
+                getSpelerLijst()[spelerIndex].getGereedschapskistje()[1].setReedsGebruiktDezeRonde(true);
                 
-                if(gereedschap3 == true)
+                if(gereedschap3 == true && getSpelerLijst()[spelerIndex].getGereedschapskistje()[2].getReedsGebruiktDezeRonde() == false)
                 {
                     dobbelResultaat = dobbelResultaat + gereedschap3Waarde;
+                    getSpelerLijst()[spelerIndex].getGereedschapskistje()[2].setReedsGebruiktDezeRonde(true);
                 }
             }
             else
             {
-                if(gereedschap3 == true)
+                if(gereedschap3 == true && getSpelerLijst()[spelerIndex].getGereedschapskistje()[2].getReedsGebruiktDezeRonde() == false)
                 {
                     dobbelResultaat = dobbelResultaat + gereedschap3Waarde;
+                    getSpelerLijst()[spelerIndex].getGereedschapskistje()[2].setReedsGebruiktDezeRonde(true);
                 }
             }    
         }
@@ -850,9 +1002,10 @@ public class DomeinController
     {
         int resultaat = 0;
         SecureRandom random = new SecureRandom();
-        for(int loper=0;loper<aantalStamleden;loper++)
+        //Men krijgt een dobbelbeurt per stamlid
+        for(int dobbelbeurt=0;dobbelbeurt<aantalStamleden;dobbelbeurt++)
         {
-            resultaat = resultaat + 1 + random.nextInt(6);
+            resultaat = resultaat + 1 + random.nextInt(6); //+1 omdat men anders kans heeft om 0 te smijten
         }
         return resultaat;
     }
@@ -861,19 +1014,29 @@ public class DomeinController
     {
         Scanner invoer = new Scanner(System.in);
         int spelerIndex = spelerNummerOphalen() - 1, gebiedNummer = 0, gebiedIndex = 0, temp;
-        
-        toonGebieden();
+        //De speler krijgt de keuze om zijn stamleden weg te halen van het gebied
         toonMijnStamleden();
         do{
-        System.out.println("Van welk gebied wil je je stamleden weghalen zonder iets te krijgen?");
-        gebiedNummer = invoer.nextInt();
-        }while(gebiedNummer < 0 && gebiedNummer > 9);
+            try
+            {
+                System.out.println("Van welk gebied wil je je stamleden weghalen zonder iets te krijgen?");
+                gebiedNummer = invoer.nextInt();
+                invoer.nextLine();
+            }
+            catch (InputMismatchException geenStamledenInnen) 
+            {
+                invoer.nextLine();
+                System.out.println("Voer een getal in.");
+            }
+        }while(gebiedNummer < 0 && gebiedNummer > 13);
         
         gebiedIndex = gebiedNummer - 1;        
         
         //Het aantal stamleden van speler [spelerIndex] dat op gebied [gebiedIndex] staan worden opgeslagen
         temp = getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
         //De stamleden worden van het gebied verwijderd
+        getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen()-temp);
+        //De stamleden worden van de stamledenLocatieLijst verwijderd
         getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
         //De speler krijgt zijn stamleden terug
         getSpelerLijst()[spelerIndex].setAantalStamleden(getSpelerLijst()[spelerIndex].getAantalStamleden()+ temp);
@@ -885,8 +1048,7 @@ public class DomeinController
     private int spelerNummerOphalen()
     {
         int spelerNummer=0;
-        
-        //Spelernummer ophalen
+        //Spelernummer ophalen van de speler aan beurt
         for (Speler speler : getSpelerLijst()) 
         {
             if (speler.getAanBeurt()) 
@@ -894,7 +1056,20 @@ public class DomeinController
                 spelerNummer = speler.getNummer();
             }  
         }  
-        
         return spelerNummer;
+    }
+    
+    private void gereedschapResetten()
+    {
+        for (Speler speler : getSpelerLijst())
+        {
+            for (Gereedschap gereedschap : speler.getGereedschapskistje())
+            {
+                //Het reeds gebruikt deze ronde wordt weer op false gezet zodat ze het de volgende
+                //ronde wel kunnen gebruiken
+                gereedschap.setReedsGebruiktDezeRonde(false);
+            }
+        }
+        
     }
 }

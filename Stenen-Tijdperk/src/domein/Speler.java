@@ -1,7 +1,5 @@
 package domein;
 
-import java.security.SecureRandom;
-
 public final class Speler {
 
     private int aantalHout;
@@ -10,6 +8,7 @@ public final class Speler {
     private int aantalGoud;
     private int aantalVoedsel;
     private int aantalStamleden;
+    private int voedselProductie;
     private int nummer;
     private int punten;
     private String naam;
@@ -31,11 +30,7 @@ public final class Speler {
         setAantalVoedsel(12);
         setGereedschapskistje();
         setPunten(0);
-    }
-
-    public Gereedschap[] getGereedschapskistje()
-    {
-        return gereedschapskistje;
+        setVoedselProductie(0);
     }
 
     private void setGereedschapskistje()
@@ -44,30 +39,29 @@ public final class Speler {
         
         for(int loper=0; loper<getGereedschapskistje().length;loper++)
         {
-            Gereedschap gereedschapje = new Gereedschap(loper+1, 0, false);
+            Gereedschap gereedschapje = new Gereedschap(loper+1);
             gereedschapskistje[loper] = gereedschapje;
         }
         
     }
     
-    private void setPunten(int aantalPunten)
+    private void setVoedselProductie(int voedselProductie)
+    {
+        this.voedselProductie = voedselProductie;
+    }
+    
+    private void setPunten(int punten)
     {
         this.punten = punten;
     }
     
-    private int getPunten()
-    {
-        return punten;
-    }
     
-    
-    
-    public final void setNummer(int nummer) 
+    private final void setNummer(int nummer) 
     {
         this.nummer = nummer;
     }
     
-    public void setAantalHout(int aantalHout) 
+    private void setAantalHout(int aantalHout) 
     {
         if (aantalHout < 0)
         {
@@ -76,7 +70,7 @@ public final class Speler {
         this.aantalHout = aantalHout;
     }
 
-    public void setAantalLeem(int aantalLeem) 
+    private void setAantalLeem(int aantalLeem) 
     {
         if (aantalLeem < 0)
         {
@@ -85,7 +79,7 @@ public final class Speler {
         this.aantalLeem = aantalLeem;
     }
 
-    public void setAantalSteen(int aantalSteen) 
+    private void setAantalSteen(int aantalSteen) 
     {
         if (aantalSteen < 0)
         {
@@ -94,7 +88,7 @@ public final class Speler {
         this.aantalSteen = aantalSteen;
     }
 
-    public void setAantalGoud(int aantalGoud) 
+    private void setAantalGoud(int aantalGoud) 
     {
         if (aantalGoud < 0)
         {
@@ -103,14 +97,14 @@ public final class Speler {
         this.aantalGoud = aantalGoud;
     }
     
-     private final void setNaam(String naam)
+    private final void setNaam(String naam)
     {
         if (naam.length() > 10)
             throw new IllegalArgumentException("Naam van de speler is te lang!");
         this.naam = naam;
     }
     
-    public final void setKleur(String kleur)
+    private final void setKleur(String kleur)
     {
         this.kleur = kleur;
     }
@@ -120,7 +114,7 @@ public final class Speler {
         this.aanBeurt = aanBeurt;
     }
 
-    public void setAantalVoedsel(int aantalVoedsel)
+    private void setAantalVoedsel(int aantalVoedsel)
     {
         if (aantalVoedsel < 0)
         {
@@ -187,6 +181,21 @@ public final class Speler {
     {
         return aanBeurt;
     }
+
+    public Gereedschap[] getGereedschapskistje()
+    {
+        return gereedschapskistje;
+    }
+    
+    public int getVoedselProductie()
+    {
+        return voedselProductie;
+    }
+    
+    public int getPunten()
+    {
+        return punten;
+    }
     
     @Override
     public String toString()
@@ -194,7 +203,7 @@ public final class Speler {
         String leeg = "";
         return String.format("%n%s: %d %10s | KLEUR:%9s | Aantal ongebruikte stamleden: %4d | Aan de beurt: %3s %18s |%n "
                     + "%20s| Aantal hout: %2d | Aantal leem: %2d | Aantal steen: %2d | Aantal goud: %2d | Aantal voedsel: %2d |%n"
-                    + "%20s | Aantal overwinningspunten: %d",
+                    + "%20s | Voedselproductie per ronde: %d     | Aantal overwinningspunten: %d",
                 this.getClass().getSimpleName().toUpperCase(), 
                 getNummer(), 
                 getNaam(),
@@ -209,6 +218,7 @@ public final class Speler {
                 getAantalGoud(), 
                 getAantalVoedsel(),
                 leeg,
+                getVoedselProductie(),
                 getPunten()
                 );
     }

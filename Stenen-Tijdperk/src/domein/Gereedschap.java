@@ -6,10 +6,10 @@ public class Gereedschap
     private int waarde;
     private boolean reedsGebruiktDezeRonde;
        
-    public Gereedschap(int nummer, int waarde, boolean reedsGebruiktDezeRonde)
+    public Gereedschap(int nummer)
     {
         setNummer(nummer);
-        setWaarde(waarde);
+        setWaarde(0);
         setReedsGebruiktDezeRonde(false);
     }
     

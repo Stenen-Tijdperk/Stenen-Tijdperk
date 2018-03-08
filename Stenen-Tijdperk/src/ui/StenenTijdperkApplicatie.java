@@ -15,7 +15,7 @@ public class StenenTijdperkApplicatie
         //Bepalen van speler die begint
         dom.bepaalRandomSpelerAanBeurt();
         
-        //Speel de eerste ronde
+        //Speel de eerste ronde;
         dom.toonMenu1MetKeuze();
     }
 }

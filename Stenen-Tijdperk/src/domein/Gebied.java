@@ -63,7 +63,7 @@ public class Gebied
         return aantalGenomenPlaatsen;
     }
     
-    public String getFunctie() 
+    private String getFunctie() 
     {
         return functie;
     }
@@ -71,7 +71,7 @@ public class Gebied
     @Override
     public String toString()
     {
-        return String.format("%s %16s | Nummer gebied: %2d | Aantal genomen plaatsen: %2d | Aantal max stamleden: %2d | Functie %20s%n",
+        return String.format("%s %16s | Nummer gebied: %2d | Aantal genomen plaatsen: %2d | Aantal max stamleden: %2d | Functie: %20s%n",
                 this.getClass().getSimpleName().toUpperCase(), getNaamGebied(), getNummer(),
                 getAantalGenomenPlaatsen(), getAantalMaxLeden(), getFunctie());
     }
