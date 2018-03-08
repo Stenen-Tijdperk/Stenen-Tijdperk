@@ -16,6 +16,6 @@ public class StenenTijdperkApplicatie
         dom.bepaalRandomSpelerAanBeurt();
         
         //Speel de eerste ronde
-        dom.toonMenuMetKeuze();
+        dom.toonMenu1MetKeuze();
     }
 }

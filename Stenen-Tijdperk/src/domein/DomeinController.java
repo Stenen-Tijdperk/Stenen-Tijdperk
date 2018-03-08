@@ -220,6 +220,21 @@ public class DomeinController
         aanmakenLocatieLijst();
     }
     
+    public void bepaalRandomSpelerAanBeurt()
+    {
+        SecureRandom random = new SecureRandom();
+        
+        //Speler int nummer is aan beurt
+        int nummer = random.nextInt(getSpelerLijst().length);
+        System.out.printf("Speler %s mag beginnen.%n", nummer+1);
+        
+        //Beurt wordt true gezet bij random bepaalde speler
+        getSpelerLijst()[nummer].setAanBeurt(true);
+        
+        //Mooie lijn voor overzicht
+        System.out.println();
+    }
+    
     private void toonSpelers()
     {
         //Spelers eens afprinten
@@ -264,25 +279,10 @@ public class DomeinController
         //Witte lijn voor overzicht
         System.out.println();
     }
-    
-    public void bepaalRandomSpelerAanBeurt()
-    {
-        SecureRandom random = new SecureRandom();
-        
-        //Speler int nummer is aan beurt
-        int nummer = random.nextInt(getSpelerLijst().length);
-        System.out.printf("Speler %s mag beginnen.%n", nummer+1);
-        
-        //Beurt wordt true gezet bij random bepaalde speler
-        getSpelerLijst()[nummer].setAanBeurt(true);
-        
-        //Mooie lijn voor overzicht
-        System.out.println();
-    }
 
     public void deelRonde1Spelen()
     {  
-            toonMenuMetKeuze();
+            toonMenu1MetKeuze();
     }
 
     private void overgangVolgendeDeelronde()
@@ -318,10 +318,36 @@ public class DomeinController
     
     private void deelRonde2Spelen()
     {  
-        //Hierin komt grootste deel van Iteratie 2
+        if(deelRonde2Gedaan())
+        {
+          overgangVolgendeRonde(); 
+        }
+        else
+        {
+            toonMenu2MetKeuze();
+        }
     }
     
-    public void toonMenuMetKeuze()
+    private boolean deelRonde2Gedaan()
+    {
+        //True is gelijk aan het spel is gedaan
+        boolean gedaan = true;
+        for (int[] spelersrij : getStamledenLocatieLijst()) {
+            for (int kolom = 0; kolom < spelersrij.length; kolom++) {
+                if (spelersrij[kolom] != 0) {
+                    gedaan = false;
+                }
+            }
+        }
+        return gedaan;
+    }
+    
+    private void overgangVolgendeRonde()
+    {
+        
+    }
+    
+    public void toonMenu1MetKeuze()
     {
         Scanner invoer = new Scanner(System.in);
         int nummer = 0, gebiedNummer = 0, aantal = 0;
@@ -391,14 +417,14 @@ public class DomeinController
                 if(aantal <= 0)
                 {
                     System.out.printf("Je hebt geen stamleden geplaats, je blijft aan de beurt.%n");
-                    toonMenuMetKeuze();
+                    toonMenu1MetKeuze();
                 }
 
                 plaatsStamleden(gebiedNummer, aantal);
                 
                 if(aantal != 0)
                 {
-                    beurtOverslaan();
+                    beurtOverslaan1();
                 }
                 
                 if(controleerAlleStamledenGeplaatst())
@@ -408,7 +434,7 @@ public class DomeinController
                 
             break;
             case 4:
-                beurtOverslaan();
+                beurtOverslaan1();
                 deelRonde1Spelen();
             break;
             case 5:
@@ -421,8 +447,71 @@ public class DomeinController
              break;
         }
     }
+    
+    private void toonMenu2MetKeuze()
+    {
+        Scanner invoer = new Scanner(System.in);
+        int nummer = 0;
+        String antwoord;
+        
+        do{
+            try
+            {
+                System.out.printf("Geef een nummer voor de actie die u wilt uitvoeren: %n"
+                + "1: Toon spelers | 2:  Toon gebieden | 3: Stamleden innen | 4: Geen stamleden innen | 5: Toon mijn stamleden | 6: Toon mijn gereedschap%n");
+                nummer = invoer.nextInt();
+                invoer.nextLine();
+            }
+            catch (InputMismatchException begin) 
+            {
+                invoer.nextLine();
+                System.out.println("Voer een getal in.");
+            }
+        }while(nummer < 1 || nummer > 6);
 
-    private void beurtOverslaan()
+        //Witte lijn voor overzicht
+        System.out.println();
+
+        switch(nummer)
+        {
+            case 1:
+                toonSpelers();
+                deelRonde2Spelen();
+            break;
+            case 2:
+                toonGebieden();
+                deelRonde2Spelen();
+            break;
+            case 3:
+                stamledenInnen();
+            break;
+            case 4:
+                do
+                {
+                System.out.print("Bent u zeker dat u geen stamleden wilt innen? Zeg ja of nee");
+                antwoord = invoer.nextLine();
+                }while("ja".equals(antwoord) || "nee".equals(antwoord));
+                if("nee".equals(antwoord))
+                {
+                    deelRonde2Spelen();
+                }
+                else
+                {
+                    geenStamledenInnen();
+                }
+            break;
+            case 5:
+                toonMijnStamleden();
+                deelRonde2Spelen();
+            break;
+            case 6:
+                toonMijnGereedschap();
+                deelRonde2Spelen();
+             break;
+        }
+    }
+
+    private void beurtOverslaan1()
     {
         int spelerIndex=spelerNummerOphalen()-1, spelerNummer = spelerNummerOphalen();
         
@@ -455,7 +544,7 @@ public class DomeinController
             //Volgende speler heeft geen stamleden? Beurt overslaan
             if (getSpelerLijst()[spelerIndex].getAantalStamleden() == 0)
             {
-                beurtOverslaan();
+                beurtOverslaan1();
             }
                 deelRonde1Spelen();
         }
@@ -589,7 +678,7 @@ public class DomeinController
             oke = false;
             System.out.println("Je hebt in een vorige ronde al op dat gebied stamleden geplaatst.");
             System.out.println();
-            toonMenuMetKeuze();
+            toonMenu1MetKeuze();
         }
         
         //Je hebt slechts 1 ventje maar wilt op gebied hut gaan
@@ -597,9 +686,54 @@ public class DomeinController
         {
             oke = false;
             System.out.printf("Je hebt minder als twee stamleden.%n%n");
-            toonMenuMetKeuze();
+            toonMenu1MetKeuze();
         }
         return oke;
+    }
+    
+    private void stamledenInnen()
+    {
+        Scanner invoer = new Scanner(System.in);
+        String antwoord;
+        int dobbelResultaat, gereedschap1 = 0, gereedschap2 = 0, gereedschap3 = 0, gebiedNummer, spelerIndex = spelerNummerOphalen()-1, gebiedIndex=0, aantalStamleden;
+                
+        toonMijnStamleden();
+        
+        System.out.println("Van welk gebied wilt u uw stamleden innen?");
+        gebiedNummer = invoer.nextInt();
+        
+        gebiedIndex = gebiedNummer -1;
+        aantalStamleden = getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
+        
+        dobbelResultaat = dobbelen(aantalStamleden);
+        System.out.printf("U hebt %d gedobbeld.", dobbelResultaat);
+                
+        do{
+            System.out.print("Wilt u uw gereedschap gebruiken?");
+            antwoord = invoer.nextLine();
+        }while("ja".equals(antwoord) || "nee".equals(antwoord));
+        gebruikGereedschap(dobbelResultaat, gereedschap1, gereedschap2, gereedschap3);
+    }
+    
+    private int gebruikGereedschap(int dobbelResultaat, int gereedschap1, int gereedschap2, int gereedschap3)
+    {
+        return dobbelResultaat + gereedschap1 + gereedschap2 + gereedschap3;
+    }
+    
+    private int dobbelen(int aantalStamleden)
+    {
+        int resultaat = 0;
+        SecureRandom random = new SecureRandom();
+        for(int loper=0;loper<aantalStamleden;loper++)
+        {
+            resultaat = resultaat + 1 + random.nextInt(6);
+        }
+        return resultaat;
+    }
+    
+    private void geenStamledenInnen()
+    {
+        
     }
     
     private int spelerNummerOphalen()
