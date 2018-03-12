@@ -476,6 +476,12 @@ public class StenenTijdperkApplicatie
         gebiedIndex = gebiedNummer -1;
         //De stamleden van dat gebied worden opgehaald en opgeslagen in aantalStamleden
         aantalStamleden = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
+        //Verwijder het aantal stamleden van het gebied
+        temp = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
+        dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
+        dom.getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(dom.getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
+        //Geef de speler zijn stamleden terug
+        dom.getSpelerLijst()[spelerIndex].setAantalStamleden(dom.getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
         //De hut, voedselproductie, gereedschapsmaker (gebiedIndex 0 t.e.m. 2)
         //Voor hutten kopen (gebiedIndex 8 t.e.m. 11)
         //NAKIJKEN: klopt de voorwaarde wel???
@@ -485,33 +491,14 @@ public class StenenTijdperkApplicatie
             switch(gebiedIndex)
             {
                 case 0:
-                    //Verwijder het aantal stamleden van het gebied
-                    temp = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
-                    dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
-                    dom.getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(dom.getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
-                    //Geef de speler zijn stamleden terug
-                    dom.getSpelerLijst()[spelerIndex].setAantalStamleden(dom.getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
                     //Geef de speler zijn reward: 1 extra stamlid
                     dom.getSpelerLijst()[spelerIndex].setAantalStamleden(dom.getSpelerLijst()[spelerIndex].getAantalStamleden()+1);
                 break;
-                case 1:
-                    //Verwijder het aantal stamleden van het gebied
-                    temp = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
-                    dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
-                    dom.getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(dom.getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
-                    //Geef de speler zijn stamleden terug
-                    dom.getSpelerLijst()[spelerIndex].setAantalStamleden(dom.getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
+                case 1:dom.getSpelerLijst()[spelerIndex].setAantalStamleden(dom.getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
                     //Geef de speler zijn reward: 1 extra voedselproductie
                     dom.getSpelerLijst()[spelerIndex].setVoedselProductie(dom.getSpelerLijst()[spelerIndex].getVoedselProductie()+1);
                 break;
                 case 2:
-                    //DEZE ZEKER NAKIJKEN
-                    //Verwijder het aantal stamleden van het gebied
-                    temp = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
-                    dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
-                    dom.getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(dom.getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
-                    //Geef de speler zijn stamleden terug
-                    dom.getSpelerLijst()[spelerIndex].setAantalStamleden(dom.getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
                     //Geef de speler zijn reward: 1 extra waarde van werktuig
                     for (int loper=0;loper<dom.getSpelerLijst()[spelerIndex].getGereedschapskistje().length;loper++)
                     {
@@ -536,45 +523,21 @@ public class StenenTijdperkApplicatie
                     }
                 break;
                 case 8:
-                    //Verwijder het aantal stamleden van het gebied
-                    temp = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
-                    dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
-                    dom.getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(dom.getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
-                    //Geef de speler zijn stamleden terug
-                    dom.getSpelerLijst()[spelerIndex].setAantalStamleden(dom.getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
                     //Geef speler het aantal punten + hut wordt verwijderd uit de lijst NOG TOEVOEGEN
                     aantalPunten = dom.getHutLijst()[8].berekenKostPrijsHut();
                     dom.getSpelerLijst()[spelerIndex].setPunten(dom.getSpelerLijst()[spelerIndex].getPunten() + aantalPunten);
                 break;
                 case 9:
-                    //Verwijder het aantal stamleden van het gebied
-                    temp = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
-                    dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
-                    dom.getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(dom.getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
-                    //Geef de speler zijn stamleden terug
-                    dom.getSpelerLijst()[spelerIndex].setAantalStamleden(dom.getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
                     //Geef speler het aantal punten + hut wordt verwijderd uit de lijst NOG TOEVOEGEN
                     aantalPunten = dom.getHutLijst()[9].berekenKostPrijsHut();
                     dom.getSpelerLijst()[spelerIndex].setPunten(dom.getSpelerLijst()[spelerIndex].getPunten() + aantalPunten);
                 break;
                 case 10:
-                    //Verwijder het aantal stamleden van het gebied
-                    temp = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
-                    dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
-                    dom.getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(dom.getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
-                    //Geef de speler zijn stamleden terug
-                    dom.getSpelerLijst()[spelerIndex].setAantalStamleden(dom.getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
                     //Geef speler het aantal punten + hut wordt verwijderd uit de lijst NOG TOEVOEGEN
                     aantalPunten = dom.getHutLijst()[10].berekenKostPrijsHut();
                     dom.getSpelerLijst()[spelerIndex].setPunten(dom.getSpelerLijst()[spelerIndex].getPunten() + aantalPunten);
                 break;
                 case 11:
-                    //Verwijder het aantal stamleden van het gebied
-                    temp = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
-                    dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
-                    dom.getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(dom.getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
-                    //Geef de speler zijn stamleden terug
-                    dom.getSpelerLijst()[spelerIndex].setAantalStamleden(dom.getSpelerLijst()[spelerIndex].getAantalStamleden()+temp);
                     //Geef speler het aantal punten + hut wordt verwijderd uit de lijst NOG TOEVOEGEN
                     aantalPunten = dom.getHutLijst()[11].berekenKostPrijsHut();
                     dom.getSpelerLijst()[spelerIndex].setPunten(dom.getSpelerLijst()[spelerIndex].getPunten() + aantalPunten);
@@ -586,13 +549,13 @@ public class StenenTijdperkApplicatie
         }
         else
         {
-            //Voor deze gebieden moet er gedobbelt worden
+            //Er wordt gedobbeld
             dobbelResultaat = dom.dobbelen(aantalStamleden);
             System.out.printf("U hebt %d gedobbeld.", dobbelResultaat);
-        
+            
             if(dom.controleerOfBeschikbaarGereedschapBezit(spelerIndex))
             {
-              dom.toonMijnGereedschap();
+               dom.toonMijnGereedschap();
                 do{
                     System.out.print("Wilt u uw gereedschap gebruiken?");
                     antwoord = invoer.nextLine();
@@ -602,6 +565,41 @@ public class StenenTijdperkApplicatie
             else
             {
                 System.out.print("U bezit geen gereedschap dat u kan gebruiken.");
+            }
+                    
+            //Gebieden 4 t.e.m. 9
+            
+            //Verwijder het aantal stamleden van het gebied
+            temp = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex];
+            dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] = dom.getStamledenLocatieLijst()[spelerIndex][gebiedIndex] - temp;
+            dom.getGebiedLijst()[gebiedIndex].setAantalGenomenPlaatsen(dom.getGebiedLijst()[gebiedIndex].getAantalGenomenPlaatsen() - temp);
+
+            switch(gebiedIndex)
+            {
+                case 4: //Voedsel
+                    //Speler krijgt aantal dobbel gedeeld door de kostprijs
+                    dom.getSpelerLijst()[spelerIndex].setAantalVoedsel(dom.getSpelerLijst()[spelerIndex].getAantalVoedsel()+(dobbelResultaat/2));
+                    break;
+                case 5: //Hout
+                    //Speler krijgt aantal dobbel gedeeld door de kostprijs
+                    dom.getSpelerLijst()[spelerIndex].setAantalHout(dom.getSpelerLijst()[spelerIndex].getAantalHout()+(dobbelResultaat/3));
+                    
+                    break;
+                case 6: //Leem
+                    //Speler krijgt aantal dobbel gedeeld door de kostprijs
+                    dom.getSpelerLijst()[spelerIndex].setAantalLeem(dom.getSpelerLijst()[spelerIndex].getAantalLeem()+(dobbelResultaat/4));
+                    
+                    break;
+                case 7: //Steen
+                    //Speler krijgt aantal dobbel gedeeld door de kostprijs
+                    dom.getSpelerLijst()[spelerIndex].setAantalSteen(dom.getSpelerLijst()[spelerIndex].getAantalSteen()+(dobbelResultaat/5));
+                    
+                    break;
+                case 8: //Goud
+                    //Speler krijgt aantal dobbel gedeeld door de kostprijs
+                    dom.getSpelerLijst()[spelerIndex].setAantalGoud(dom.getSpelerLijst()[spelerIndex].getAantalGoud()+(dobbelResultaat/6));
+                    
+                    break;
             }
         }
         
