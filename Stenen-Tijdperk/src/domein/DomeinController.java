@@ -3,6 +3,7 @@ package domein;
 import java.security.SecureRandom;
 import java.util.Objects;
 
+
 public class DomeinController
 {
     public Speler[] spelerLijst;
