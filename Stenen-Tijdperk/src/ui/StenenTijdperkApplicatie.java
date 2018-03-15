@@ -24,9 +24,6 @@ public class StenenTijdperkApplicatie
         dom.aanmakenGebieden();
         aanmakenSpelers();
         
-        
-        
-        
         //Speel de eerste ronde;
         deelRonde1Spelen();
     }
